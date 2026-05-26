@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Disney Ride Display</title>
+
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: Arial;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #card {
+      text-align: center;
+    }
+
+    #name {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    #land {
+      font-size: 20px;
+      color: #ccc;
+      margin-bottom: 10px;
+    }
+
+    #wait {
+      font-size: 28px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="card">
+  <div id="name">Loading...</div>
+  <div id="land"></div>
+  <div id="wait"></div>
+</div>
+
+<script>
+
+// API Proxy
+var proxy = "https://glistening-blini-23387c.netlify.app/.netlify/functions/proxy?url=";
+
+var rideToLand = {
+
+  // Magic Kingdom
+  134: "MK - Adventureland", // Jungle Cruise
+  137: "MK - Adventureland", // Pirates of the Caribbean
+  133: "MK - Fantasyland", // it's a small world
+  132: "MK - Fantasyland", // Dumbo
+  127: "MK - Fantasyland", // Little Mermaid
+  136: "MK - Fantasyland", // Peter Pan's Flight
+  129: "MK - Fantasyland", // Seven Dwarfs
+  126: "MK - Fantasyland", // Barnstormer
+  142: "MK - Fantasyland", // Winnie the Pooh
+  130: "MK - Frontierland", // Big Thunder Mountain Railroad
+  13630: "MK - Frontierland", // Tiana's Bayou Adventure
+  140: "MK - Liberty Square", // Haunted Mansion
+  248: "MK - Tomorrowland", // Astro Orbiter
+  131: "MK - Tomorrowland", // Buzz Lightyear's Space Ranger Spin
+  138: "MK - Tomorrowland", // Space Mountain
+  143: "MK - Tomorrowland", // Tomorrowland Speedway
+  1190: "MK - Tomorrowland", // PeopleMover
+  11527: "MK - Tomorrowland", // TRON
+
+  // Hollywood Studios
+  6361: "Hollywood Studios", // Mickey & Minnie's Runaway Railway
+  5476: "Hollywood Studios", // Slinky Dog Dash
+  16342: "Hollywood Studios", // Rock 'n' Roller Coaster
+  123: "Hollywood Studios", // Tower of Terror
+  120: "Hollywood Studios", // Star Tours
+  6368: "Hollywood Studios", // Smugglers Run
+  6369: "Hollywood Studios", // Rise of the Resistance
+
+  // EPCOT
+  10916: "EPCOT", // Guardians of the Galaxy
+  155: "EPCOT", // Journey Into Imagination with Figment
+  156: "EPCOT", // Living with the Land
+  158: "EPCOT", // Mission: SPACE
+  10914: "EPCOT", // Remy's Ratatouille Adventure
+  153: "EPCOT", // The Seas with Nemo & Friends
+  151: "EPCOT", // Soarin'
+  159: "EPCOT", // Spaceship Earth
+  160: "EPCOT", // Test Track
+
+  // Animal Kingdom
+  4439: "Animal Kingdom", // Flight of Passage
+  110: "Animal Kingdom", // Expedition Everest
+  112: "Animal Kingdom", // Kali River Rapids
+  113: "Animal Kingdom", // Kilimanjaro Safaris
+  4438: "Animal Kingdom", // Na'vi River Journey
+
+  // Disneyland (DL)
+  323: "DL - Frontierland", // Big Thunder Mountain Railroad
+  296: "DL - Adventureland", // Jungle Cruise
+  326: "DL - Adventureland", // Indiana Jones Adventure
+  306: "DL - Bayou Country", // Pooh
+  14168: "DL - Bayou Country", // Tiana's Bayou Adventure
+  13958: "DL - New Orleans Square", // Haunted Mansion
+  289: "DL - New Orleans Square", // Pirates of the Caribbean
+  307: "DL - Fantasyland", // it's a small world
+  285: "DL - Fantasyland", // Alice in Wonderland
+  303: "DL - Fantasyland", // Casey Jr. Circus Train
+  275: "DL - Fantasyland", // Dumbo
+  279: "DL - Fantasyland", // Matterhorn Bobsleds
+  280: "DL - Fantasyland", // Mr. Toad's Wild Ride
+  281: "DL - Fantasyland", // Peter Pan's Flight
+  282: "DL - Fantasyland", // Pinocchio's Daring Journey
+  283: "DL - Fantasyland", // Snow White's Enchanted Wish
+  305: "DL - Fantasyland", // Storybook Land Canal Boats
+  324: "DL - Toontown", // Gadget Coaster (Chip 'n' Dale)
+  11526: "DL - Toontown", // Runaway Railway
+  332: "DL - Toontown", // Roger Rabbit
+  6339: "DL - Galaxy's Edge", // Smugglers Run
+  6340: "DL - Galaxy's Edge", // Rise of the Resistance
+  287: "DL - Tomorrowland", // Astro Orbitor
+  317: "DL - Tomorrowland", // Autopia
+  273: "DL - Tomorrowland", // Buzz Lightyear Astro Blasters
+  276: "DL - Tomorrowland", // Finding Nemo Submarine Voyage
+  284: "DL - Tomorrowland", // Hyperspace Mountain / Space Mountain
+  286: "DL - Tomorrowland", // Star Tours
+
+  // Disney California Adventure (DCA)
+  329: "DCA", // Guardians of the Galaxy - Mission: BREAKOUT!
+  8843: "DCA", // WEB SLINGERS
+  295: "DCA", // Radiator Springs Racers
+  312: "DCA", // Soarin' Over California
+  302: "DCA", // Grizzly River Run
+  291: "DCA", // Monsters Inc. Mike & Sulley
+  319: "DCA", // Goofy's Sky School
+  322: "DCA", // Incredicoaster
+  313: "DCA" // Toy Story Midway Mania
+
+};
+
+
+
+// store rides
+var rideList = [];
+var currentIndex = 0;
+
+
+// fetch all parks
+function fetchTimes() {
+  var urls = [
+    "https://queue-times.com/parks/6/queue_times.json", // Magic Kingdom
+    "https://queue-times.com/parks/7/queue_times.json", // Hollywood Studios
+    "https://queue-times.com/parks/8/queue_times.json", // Animal Kingdom
+    "https://queue-times.com/parks/5/queue_times.json", // EPCOT
+    "https://queue-times.com/parks/16/queue_times.json", // Disneyland Park
+    "https://queue-times.com/parks/17/queue_times.json" // California Adventure
+  ];
+
+  var results = [];
+  var completed = 0;
+
+  urls.forEach(function(url, index) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", proxy + encodeURIComponent(url), true);
+
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        results[index] = JSON.parse(xhr.responseText);
+      }
+
+      completed++;
+
+      if (completed === urls.length) {
+        process(results);
+      }
+    };
+
+    xhr.send();
+  });
+}
+
+
+// build ordered list
+function process(allData) {
+  rideList = [];
+
+  allData.forEach(function(data) {
+    if (!data || !data.lands) return;
+
+    data.lands.forEach(function(land) {
+      land.rides.forEach(function(ride) {
+
+        var mappedLand = rideToLand[ride.id];
+
+        if (mappedLand) {
+          rideList.push({
+            name: ride.name,
+            land: mappedLand,
+            wait: ride.is_open ? ride.wait_time + " min" : "Closed"
+          });
+        }
+
+      });
+    });
+  });
+
+  currentIndex = 0;
+
+  showNext();
+}
+
+
+// display one ride
+function showNext() {
+  if (rideList.length === 0) return;
+
+  var ride = rideList[currentIndex];
+
+  document.getElementById("name").innerText = ride.name;
+  document.getElementById("land").innerText = ride.land;
+  document.getElementById("wait").innerText = ride.wait;
+
+  currentIndex++;
+
+  if (currentIndex >= rideList.length) {
+    currentIndex = 0;
+  }
+}
+
+
+// refresh data every minute
+fetchTimes();
+setInterval(fetchTimes, 60000);
+
+// rotate display every 5 seconds
+setInterval(showNext, 5000);
+
+</script>
+
+</body>
+</html>
