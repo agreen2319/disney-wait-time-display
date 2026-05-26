@@ -9,14 +9,15 @@
       background: #111;
       color: white;
       font-family: Arial;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       height: 100vh;
       margin: 0;
     }
 
     #card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       text-align: center;
     }
 
@@ -48,9 +49,17 @@
     
     /* Sidebar */
     #sidebar {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    
       width: 200px;
       color: #aaa;
       font-size: 14px;
+
+      border-left: 1px solid #333;
+      padding-left: 15px;
     }
     
     #sidebar h3 {
@@ -80,7 +89,7 @@
 
   <!-- Closed rides sidebar -->
   <div id="sidebar">
-    <h3>Closed</h3>
+    <h3>Closed Rides:</h3>
     <div id="closedList"></div>
   </div>
 
