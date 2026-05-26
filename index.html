@@ -18,6 +18,12 @@
 
     #card {
       text-align: center;
+      opacity: 1;
+      transition: opacity 0.8s ease;
+    }
+    
+    .fade-out {
+      opacity: 0;
     }
 
     #name {
@@ -219,17 +225,27 @@ function process(allData) {
 function showNext() {
   if (rideList.length === 0) return;
 
-  var ride = rideList[currentIndex];
+  var card = document.getElementById("card");
 
-  document.getElementById("name").innerText = ride.name;
-  document.getElementById("land").innerText = ride.land;
-  document.getElementById("wait").innerText = ride.wait;
+  // fade out
+  card.classList.add("fade-out");
 
-  currentIndex++;
+  setTimeout(function() {
+    var ride = rideList[currentIndex];
 
-  if (currentIndex >= rideList.length) {
-    currentIndex = 0;
-  }
+    document.getElementById("name").innerText = ride.name;
+    document.getElementById("land").innerText = ride.land;
+    document.getElementById("wait").innerText = ride.wait;
+
+    currentIndex++;
+    if (currentIndex >= rideList.length) {
+      currentIndex = 0;
+    }
+
+    // fade back in
+    card.classList.remove("fade-out");
+
+  }, 400); // half of transition time
 }
 
 
@@ -238,7 +254,12 @@ fetchTimes();
 setInterval(fetchTimes, 60000);
 
 // rotate display every 5 seconds
-setInterval(showNext, 5000);
+function startRotation() {
+  showNext();
+
+  setTimeout(startRotation, 5000);
+}
+startRotation();
 
 </script>
 
