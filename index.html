@@ -53,92 +53,94 @@ var proxy = "https://glistening-blini-23387c.netlify.app/.netlify/functions/prox
 var rideToLand = {
 
   // Magic Kingdom
-  134: "MK - Adventureland", // Jungle Cruise
-  137: "MK - Adventureland", // Pirates of the Caribbean
-  133: "MK - Fantasyland", // it's a small world
-  132: "MK - Fantasyland", // Dumbo
-  127: "MK - Fantasyland", // Little Mermaid
-  136: "MK - Fantasyland", // Peter Pan's Flight
-  129: "MK - Fantasyland", // Seven Dwarfs
-  126: "MK - Fantasyland", // Barnstormer
-  142: "MK - Fantasyland", // Winnie the Pooh
-  130: "MK - Frontierland", // Big Thunder Mountain Railroad
-  13630: "MK - Frontierland", // Tiana's Bayou Adventure
-  140: "MK - Liberty Square", // Haunted Mansion
-  248: "MK - Tomorrowland", // Astro Orbiter
-  131: "MK - Tomorrowland", // Buzz Lightyear's Space Ranger Spin
-  138: "MK - Tomorrowland", // Space Mountain
-  143: "MK - Tomorrowland", // Tomorrowland Speedway
-  1190: "MK - Tomorrowland", // PeopleMover
-  11527: "MK - Tomorrowland", // TRON
+  134: "Magic Kingdom - Adventureland", // Jungle Cruise
+  137: "Magic Kingdom - Adventureland", // Pirates of the Caribbean
+  133: "Magic Kingdom - Fantasyland", // it's a small world
+  132: "Magic Kingdom - Fantasyland", // Dumbo
+  127: "Magic Kingdom - Fantasyland", // Little Mermaid
+  136: "Magic Kingdom - Fantasyland", // Peter Pan's Flight
+  129: "Magic Kingdom - Fantasyland", // Seven Dwarfs
+  126: "Magic Kingdom - Fantasyland", // Barnstormer
+  142: "Magic Kingdom - Fantasyland", // Winnie the Pooh
+  130: "Magic Kingdom - Frontierland", // Big Thunder Mountain Railroad
+  13630: "Magic Kingdom - Frontierland", // Tiana's Bayou Adventure
+  140: "Magic Kingdom - Liberty Square", // Haunted Mansion
+  248: "Magic Kingdom - Tomorrowland", // Astro Orbiter
+  131: "Magic Kingdom - Tomorrowland", // Buzz Lightyear's Space Ranger Spin
+  138: "Magic Kingdom - Tomorrowland", // Space Mountain
+  143: "Magic Kingdom - Tomorrowland", // Tomorrowland Speedway
+  1190: "Magic Kingdom - Tomorrowland", // PeopleMover
+  11527: "Magic Kingdom - Tomorrowland", // TRON
 
   // Hollywood Studios
-  6361: "Hollywood Studios", // Mickey & Minnie's Runaway Railway
-  5476: "Hollywood Studios", // Slinky Dog Dash
-  16342: "Hollywood Studios", // Rock 'n' Roller Coaster
-  123: "Hollywood Studios", // Tower of Terror
-  120: "Hollywood Studios", // Star Tours
-  6368: "Hollywood Studios", // Smugglers Run
-  6369: "Hollywood Studios", // Rise of the Resistance
+  6361: "Hollywood Studios - Hollywood Boulevard", // Mickey & Minnie's Runaway Railway
+  5476: "Hollywood Studios - Toy Story Land", // Slinky Dog Dash
+  117: "Hollywood Studios - Toy Story Land", // Toy Story Mania
+  16342: "Hollywood Studios - Sunset Boulevard", // Rock 'n' Roller Coaster
+  123: "Hollywood Studios - Sunset Boulevard", // Tower of Terror
+  120: "Hollywood Studios - Echo Lake", // Star Tours
+  6368: "Hollywood Studios - Galaxy's Edge", // Smugglers Run
+  6369: "Hollywood Studios - Galaxy's Edge", // Rise of the Resistance
 
   // EPCOT
-  10916: "EPCOT", // Guardians of the Galaxy
-  155: "EPCOT", // Journey Into Imagination with Figment
-  156: "EPCOT", // Living with the Land
-  158: "EPCOT", // Mission: SPACE
-  10914: "EPCOT", // Remy's Ratatouille Adventure
-  153: "EPCOT", // The Seas with Nemo & Friends
-  151: "EPCOT", // Soarin'
-  159: "EPCOT", // Spaceship Earth
-  160: "EPCOT", // Test Track
+  10916: "EPCOT - World Discovery", // Guardians of the Galaxy
+  155: "EPCOT - World Celebration", // Journey Into Imagination with Figment
+  156: "EPCOT - World Nature", // Living with the Land
+  158: "EPCOT - World Discovery", // Mission: SPACE
+  10914: "EPCOT - France Pavilion", // Remy's Ratatouille Adventure
+  153: "EPCOT - World Nature", // The Seas with Nemo & Friends
+  151: "EPCOT - World Nature", // Soarin'
+  159: "EPCOT - World Celebration", // Spaceship Earth
+  160: "EPCOT - World Discovery", // Test Track
 
   // Animal Kingdom
-  4439: "Animal Kingdom", // Flight of Passage
-  110: "Animal Kingdom", // Expedition Everest
-  112: "Animal Kingdom", // Kali River Rapids
-  113: "Animal Kingdom", // Kilimanjaro Safaris
-  4438: "Animal Kingdom", // Na'vi River Journey
+  4439: "Animal Kingdom - Pandora", // Flight of Passage
+  110: "Animal Kingdom - Asia", // Expedition Everest
+  112: "Animal Kingdom - Asia", // Kali River Rapids
+  113: "Animal Kingdom - Africa", // Kilimanjaro Safaris
+  4438: "Animal Kingdom - Pandora", // Na'vi River Journey
 
   // Disneyland (DL)
-  323: "DL - Frontierland", // Big Thunder Mountain Railroad
-  296: "DL - Adventureland", // Jungle Cruise
-  326: "DL - Adventureland", // Indiana Jones Adventure
-  306: "DL - Bayou Country", // Pooh
-  14168: "DL - Bayou Country", // Tiana's Bayou Adventure
-  13958: "DL - New Orleans Square", // Haunted Mansion
-  289: "DL - New Orleans Square", // Pirates of the Caribbean
-  307: "DL - Fantasyland", // it's a small world
-  285: "DL - Fantasyland", // Alice in Wonderland
-  303: "DL - Fantasyland", // Casey Jr. Circus Train
-  275: "DL - Fantasyland", // Dumbo
-  279: "DL - Fantasyland", // Matterhorn Bobsleds
-  280: "DL - Fantasyland", // Mr. Toad's Wild Ride
-  281: "DL - Fantasyland", // Peter Pan's Flight
-  282: "DL - Fantasyland", // Pinocchio's Daring Journey
-  283: "DL - Fantasyland", // Snow White's Enchanted Wish
-  305: "DL - Fantasyland", // Storybook Land Canal Boats
-  324: "DL - Toontown", // Gadget Coaster (Chip 'n' Dale)
-  11526: "DL - Toontown", // Runaway Railway
-  332: "DL - Toontown", // Roger Rabbit
-  6339: "DL - Galaxy's Edge", // Smugglers Run
-  6340: "DL - Galaxy's Edge", // Rise of the Resistance
-  287: "DL - Tomorrowland", // Astro Orbitor
-  317: "DL - Tomorrowland", // Autopia
-  273: "DL - Tomorrowland", // Buzz Lightyear Astro Blasters
-  276: "DL - Tomorrowland", // Finding Nemo Submarine Voyage
-  284: "DL - Tomorrowland", // Hyperspace Mountain / Space Mountain
-  286: "DL - Tomorrowland", // Star Tours
+  323: "Disneyland - Frontierland", // Big Thunder Mountain Railroad
+  296: "Disneyland - Adventureland", // Jungle Cruise
+  326: "Disneyland - Adventureland", // Indiana Jones Adventure
+  306: "Disneyland - Bayou Country", // Pooh
+  14168: "Disneyland - Bayou Country", // Tiana's Bayou Adventure
+  13958: "Disneyland - New Orleans Square", // Haunted Mansion
+  289: "Disneyland - New Orleans Square", // Pirates of the Caribbean
+  307: "Disneyland - Fantasyland", // it's a small world
+  285: "Disneyland - Fantasyland", // Alice in Wonderland
+  303: "Disneyland - Fantasyland", // Casey Jr. Circus Train
+  275: "Disneyland - Fantasyland", // Dumbo
+  279: "Disneyland - Fantasyland", // Matterhorn Bobsleds
+  280: "Disneyland - Fantasyland", // Mr. Toad's Wild Ride
+  281: "Disneyland - Fantasyland", // Peter Pan's Flight
+  282: "Disneyland - Fantasyland", // Pinocchio's Daring Journey
+  283: "Disneyland - Fantasyland", // Snow White's Enchanted Wish
+  305: "Disneyland - Fantasyland", // Storybook Land Canal Boats
+  324: "Disneyland - Toontown", // Gadget Coaster
+  11526: "Disneyland - Toontown", // Runaway Railway
+  332: "Disneyland - Toontown", // Roger Rabbit
+  6339: "Disneyland - Galaxy's Edge", // Smugglers Run
+  6340: "Disneyland - Galaxy's Edge", // Rise of the Resistance
+  287: "Disneyland - Tomorrowland", // Astro Orbitor
+  317: "Disneyland - Tomorrowland", // Autopia
+  273: "Disneyland - Tomorrowland", // Buzz Lightyear Astro Blasters
+  276: "Disneyland - Tomorrowland", // Finding Nemo Submarine Voyage
+  284: "Disneyland - Tomorrowland", // Space Mountain
+  286: "Disneyland - Tomorrowland", // Star Tours
 
   // Disney California Adventure (DCA)
-  329: "DCA", // Guardians of the Galaxy - Mission: BREAKOUT!
-  8843: "DCA", // WEB SLINGERS
-  295: "DCA", // Radiator Springs Racers
-  312: "DCA", // Soarin' Over California
-  302: "DCA", // Grizzly River Run
-  291: "DCA", // Monsters Inc. Mike & Sulley
-  319: "DCA", // Goofy's Sky School
-  322: "DCA", // Incredicoaster
-  313: "DCA" // Toy Story Midway Mania
+  329: "California Adventure - Avengers Campus", // Guardians of the Galaxy - Mission: BREAKOUT!
+  8843: "California Adventure - Avengers Campus", // WEB SLINGERS
+  295: "California Adventure - Cars Land", // Radiator Springs Racers
+  312: "California Adventure - Grizzly Peak", // Soarin' Over California
+  302: "California Adventure - Grizzly Peak", // Grizzly River Run
+  291: "California Adventure - Hollywood Land", // Mike & Sulley
+  316: "California Adventure - Paradise Gardens Park", // Ariel
+  319: "California Adventure - Paradise Gardens Park", // Goofy's Sky School
+  322: "California Adventure - Pixar Pier", // Incredicoaster
+  313: "California Adventure - Pixar Pier" // Toy Story Midway Mania
 
 };
 
@@ -208,7 +210,6 @@ function process(allData) {
     });
   });
 
-  currentIndex = 0;
 
   showNext();
 }
