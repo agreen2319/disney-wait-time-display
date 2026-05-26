@@ -100,8 +100,91 @@
 // API Proxy
 var proxy = "https://glistening-blini-23387c.netlify.app/.netlify/functions/proxy?url=";
 
+var rideToPark = {
+  // WDW
+  134: "Magic Kingdom",
+  137: "Magic Kingdom",
+  133: "Magic Kingdom",
+  132: "Magic Kingdom",
+  127: "Magic Kingdom",
+  136: "Magic Kingdom",
+  129: "Magic Kingdom",
+  126: "Magic Kingdom",
+  142: "Magic Kingdom",
+  130: "Magic Kingdom",
+  13630: "Magic Kingdom",
+  140: "Magic Kingdom",
+  248: "Magic Kingdom",
+  131: "Magic Kingdom",
+  138: "Magic Kingdom",
+  143: "Magic Kingdom",
+  1190: "Magic Kingdom",
+  11527: "Magic Kingdom",
+  6361: "Hollywood Studios",
+  5476: "Hollywood Studios",
+  117: "Hollywood Studios",
+  16342: "Hollywood Studios",
+  123: "Hollywood Studios",
+  120: "Hollywood Studios",
+  6368: "Hollywood Studios",
+  6369: "Hollywood Studios",
+  10916: "EPCOT",
+  155: "EPCOT",
+  156: "EPCOT",
+  158: "EPCOT",
+  10914: "EPCOT",
+  153: "EPCOT",
+  151: "EPCOT",
+  159: "EPCOT",
+  160: "EPCOT",
+  4439: "Animal Kingdom",
+  110: "Animal Kingdom",
+  112: "Animal Kingdom",
+  113: "Animal Kingdom",
+  4438: "Animal Kingdom",
+  
+  // Disneyland
+  323: "Disneyland",
+  296: "Disneyland",
+  326: "Disneyland",
+  306: "Disneyland",
+  14168: "Disneyland",
+  13958: "Disneyland",
+  289: "Disneyland",
+  307: "Disneyland",
+  285: "Disneyland",
+  303: "Disneyland",
+  275: "Disneyland",
+  279: "Disneyland",
+  280: "Disneyland",
+  281: "Disneyland",
+  282: "Disneyland",
+  283: "Disneyland",
+  305: "Disneyland",
+  324: "Disneyland",
+  11526: "Disneyland",
+  332: "Disneyland",
+  6339: "Disneyland",
+  6340: "Disneyland",
+  287: "Disneyland",
+  317: "Disneyland",
+  273: "Disneyland",
+  276: "Disneyland",
+  284: "Disneyland",
+  286: "Disneyland",
+  329: "California Adventure",
+  8843: "California Adventure",
+  295: "California Adventure",
+  312: "California Adventure",
+  302: "California Adventure",
+  291: "California Adventure",
+  316: "California Adventure",
+  319: "California Adventure",
+  322: "California Adventure",
+  313: "California Adventure"
+};
+  
 var rideToLand = {
-
   // Magic Kingdom
   134: "Magic Kingdom - Adventureland", // Jungle Cruise
   137: "Magic Kingdom - Adventureland", // Pirates of the Caribbean
@@ -342,52 +425,83 @@ function fetchTimes() {
 
 
 // build ordered list
+
 function process(allData) {
   rideList = [];
   var closedRides = [];
+  var parkTotals = {};
+  var parkClosed = {};
   allData.forEach(function(data) {
     if (!data || !data.lands) return;
     data.lands.forEach(function(land) {
       land.rides.forEach(function(ride) {
         var mappedLand = rideToLand[ride.id];
-        if (!mappedLand) return;
+        var park = rideToPark[ride.id];
+        if (!mappedLand || !park) return;
+        // initialize counters
+        if (!parkTotals[park]) {
+          parkTotals[park] = 0;
+          parkClosed[park] = 0;
+        }
+        parkTotals[park]++;
         if (ride.is_open) {
-          // goes in rotation
           rideList.push({
             name: ride.name,
             land: mappedLand,
             wait: ride.wait_time + " min"
           });
         } else {
-          // goes in sidebar
           closedRides.push({
             id: ride.id,
             name: ride.name,
             land: mappedLand
           });
+          parkClosed[park]++;
         }
-
       });
     });
   });
-  renderClosed(closedRides);
+  
+  // Determine fully closed parks
+  var closedParks = [];
+  Object.keys(parkTotals).forEach(function(park) {
+    if (parkTotals[park] > 0 && parkTotals[park] === parkClosed[park]) {
+      closedParks.push(park);
+    }
+  });
+  renderClosed(closedRides, closedParks);
 }
 
-function renderClosed(closedRides) {
+
+function renderClosed(closedRides, closedParks) {
   var container = document.getElementById("closedList");
   container.innerHTML = "";
-
+  
+  // Render closed rides
   closedRides.forEach(function(ride) {
-
     var div = document.createElement("div");
     div.className = "closed-ride";
-
     var name = closedRideNames[ride.id] || ride.name;
-
     div.innerText = name;
-
     container.appendChild(div);
   });
+
+  // Add divider if there are closed parks
+  if (closedParks.length > 0) {
+    var divider = document.createElement("div");
+    divider.style.marginTop = "15px";
+    divider.style.borderTop = "1px solid #444";
+    container.appendChild(divider);
+
+    // Render closed parks
+    closedParks.forEach(function(park) {
+      var div = document.createElement("div");
+      div.style.fontWeight = "bold";
+      div.style.marginTop = "8px";
+      div.innerText = park;
+      container.appendChild(div);
+    });
+  }
 }
 
 // display one ride
