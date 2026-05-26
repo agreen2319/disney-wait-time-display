@@ -34,15 +34,56 @@
     #wait {
       font-size: 28px;
     }
+
+    #container {
+      display: flex;
+      align-items: center;
+    }
+    
+    /* Main card stays centered-ish */
+    #card {
+      text-align: center;
+      margin-right: 50px;
+    }
+    
+    /* Sidebar */
+    #sidebar {
+      width: 200px;
+      color: #aaa;
+      font-size: 14px;
+    }
+    
+    #sidebar h3 {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #444;
+      padding-bottom: 5px;
+    }
+    
+    /* Closed ride items */
+    .closed-ride {
+      margin-bottom: 5px;
+    }
+
   </style>
 </head>
 
 <body>
 
-<div id="card">
-  <div id="name">Loading...</div>
-  <div id="land"></div>
-  <div id="wait"></div>
+<div id="container">
+
+  <!-- Main rotating display -->
+  <div id="card">
+    <div id="name">Loading...</div>
+    <div id="land"></div>
+    <div id="wait"></div>
+  </div>
+
+  <!-- Closed rides sidebar -->
+  <div id="sidebar">
+    <h3>Closed</h3>
+    <div id="closedList"></div>
+  </div>
+
 </div>
 
 <script>
@@ -189,25 +230,45 @@ function fetchTimes() {
 // build ordered list
 function process(allData) {
   rideList = [];
-
+  var closedRides = [];
   allData.forEach(function(data) {
     if (!data || !data.lands) return;
-
     data.lands.forEach(function(land) {
       land.rides.forEach(function(ride) {
-
         var mappedLand = rideToLand[ride.id];
-
-        if (mappedLand) {
+        if (!mappedLand) return;
+        if (ride.is_open) {
+          // goes in rotation
           rideList.push({
             name: ride.name,
             land: mappedLand,
-            wait: ride.is_open ? ride.wait_time + " min" : "Closed"
+            wait: ride.wait_time + " min"
+          });
+        } else {
+          // goes in sidebar
+          closedRides.push({
+            name: ride.name,
+            land: mappedLand
           });
         }
 
       });
     });
+  });
+  renderClosed(closedRides);
+}
+
+function renderClosed(closedRides) {
+  var container = document.getElementById("closedList");
+  container.innerHTML = "";
+
+  closedRides.forEach(function(ride) {
+    var div = document.createElement("div");
+    div.className = "closed-ride";
+
+    div.innerText = ride.name;
+
+    container.appendChild(div);
   });
 }
 
