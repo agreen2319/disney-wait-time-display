@@ -64,7 +64,7 @@
     }
     
     /* Big number */
-    #waitNumber {
+    .waitNumber {
       font-size: 110px;
       font-weight: 300;
     }
@@ -105,12 +105,13 @@
     .flip-container {
       perspective: 1000px;
       margin-bottom: 10px;
+      position: relative;
     }
     
     .flip-inner {
-      position: relative;
-      transition: transform 0.55s cubic-bezier(0.25, 1.5, 0.5, 1);
+      position: relative; 
       transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.25, 1.5, 0.5, 1);
     }
     
     .flip-container.flipping .flip-inner {
@@ -118,15 +119,29 @@
     }
     
     .flip-front, .flip-back {
-      position: relative'
-      backface-visibility: hidden;
-    }
-    
-    .flip-back {
       position: absolute;
       top: 0;
       left: 0;
+      backface-visibility: hidden;
+    }
+
+    /* inherit styling so front/back look identical */
+    .flip-front,
+    .flip-back {
+      font: inherit;
+      color: inherit;
+    }
+    
+    /* front stays normal */
+    .flip-front {
+      transform: rotateX(0deg);
+      position: relative;
+    }
+    
+    /* back starts hidden behind */
+    .flip-back {
       transform: rotateX(90deg);
+      transition: transform 0.15s ease;
     }
     
     /* Specific sizing */
@@ -661,7 +676,6 @@ function process(allData) {
 
 }
 
-
 function renderClosed(closedRides, closedParks) {
   var listContainer = document.getElementById("closedList");
   var parksContainer = document.getElementById("closedParks");
@@ -708,24 +722,35 @@ function flipElement(containerId, newValue, isImage) {
     } else {
       front.innerText = newValue;
     }
+    // reset for next cycle
     container.classList.remove("flipping");
-  }, 600);
+  }, 550);
 }
 
+var firstRun = true;
 function showNext() {
   if (rideList.length === 0) return;
   var ride = rideList[currentIndex];
-  flipElement("nameFlip", ride.name);
-  setTimeout(function() {
-    flipElement("landFlip", ride.land);
-  }, 100);
   var img = rideImages[ride.id] || "images/default.jpg";
-  setTimeout(function() {
-    flipElement("imageFlip", img, true);
-  }, 200);
-  setTimeout(function() {
-    flipElement("waitFlip", ride.wait);
-  }, 300);
+  if (firstRun) {
+    // set instantly, no animation
+    document.querySelector("#nameFlip .flip-front").innerText = ride.name;
+    document.querySelector("#landFlip .flip-front").innerText = ride.land;
+    document.querySelector("#imageFlip .flip-front").src = img;
+    document.querySelector("#waitFlip .flip-front").innerText = ride.wait;
+    firstRun = false;
+  } else {
+    flipElement("nameFlip", ride.name);
+    setTimeout(function() {
+      flipElement("landFlip", ride.land);
+    }, 100);
+    setTimeout(function() {
+      flipElement("imageFlip", img, true);
+    }, 200);
+    setTimeout(function() {
+      flipElement("waitFlip", ride.wait);
+    }, 300);
+  }
   currentIndex++;
   if (currentIndex >= rideList.length) {
     currentIndex = 0;
