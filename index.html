@@ -717,6 +717,12 @@ function flipElement(containerId, newValue, isImage) {
     back.src = newValue;
   } else {
     back.innerText = newValue;
+  
+    if (containerId === "waitFlip") {
+      var color = getWaitColor(newValue);
+      back.style.color = color;
+      front.style.color = color;
+    }
   }
   // animate down
   inner.style.transition = "transform 0.55s cubic-bezier(0.25, 1.5, 0.5, 1)";
@@ -734,6 +740,14 @@ function flipElement(containerId, newValue, isImage) {
   }, 550);
 }
 
+function getWaitColor(wait) {
+  if (wait <= 10) return "#00c853";      // green
+  if (wait <= 20) return "#64dd17";      // light green
+  if (wait <= 35) return "#ffd600";      // yellow
+  if (wait <= 55) return "#ff6d00";      // orange
+  return "#d50000";                      // red (60+)
+}
+  
 var firstRun = true;
 function showNext() {
   if (rideList.length === 0) return;
@@ -744,7 +758,9 @@ function showNext() {
     document.querySelector("#nameFlip .flip-front").innerText = ride.name;
     document.querySelector("#landFlip .flip-front").innerText = ride.land;
     document.querySelector("#imageFlip .flip-front").src = img;
-    document.querySelector("#waitFlip .flip-front").innerText = ride.wait;
+    var waitFront = document.querySelector("#waitFlip .flip-front");
+    waitFront.innerText = ride.wait;
+    waitFront.style.color = getWaitColor(ride.wait);
     firstRun = false;
   } else {
     flipElement("nameFlip", ride.name);
