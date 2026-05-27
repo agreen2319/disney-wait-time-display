@@ -27,8 +27,31 @@
     /* Main content LEFT aligned */
     #content {
       width: 700px;
+      overflow: hidden;
+      position: relative;
+    }
+        
+    /* container holding both slides */
+    #carousel {
+      position: relative;
+      transition: transform 0.6s ease-in-out;
     }
     
+    /* each slide */
+    .slide {
+      width: 100%;
+    }
+    
+    /* vertical stacking */
+    .slide + .slide {
+      margin-top: 0;
+    }
+    
+    /* animate upward */
+    .slide-up {
+      transform: translateY(-100%);
+    }
+
     /* Title */
     #name {
       font-size: 44px;
@@ -115,23 +138,26 @@
   </div>
 
   <!-- Main content -->
-  <div id="content">
-
-    <div id="name">Loading...</div>
-    <div id="land"></div>
-
-    <div id="mainRow">
-
-      <img id="image" src="images/default.jpg" />
-      <div id="waitBlock">
-        <div id="waitNumber">--</div>
-        <div id="waitLabel">minutes</div>
+  
+<div id="content">
+  <div id="carousel">
+    <div class="slide">
+      <div class="name">Loading...</div>
+      <div class="land"></div>
+      <div class="mainRow">
+        <img class="image" src="images/default.jpg" />      
       </div>
-
     </div>
+    
+    <div class="slide">
+      <div class="name"></div>
+      <div class="land"></div>
+      <div class="mainRow">
+        <img class="image" src="images/default.jpg" />
 
+      </div>
+    </div>
   </div>
-
 </div>
 
 
@@ -634,33 +660,46 @@ function renderClosed(closedRides, closedParks) {
   }
 }
 
+var showingFirst = true;
+
+function updateSlide(slideElement, ride) {
+  slideElement.querySelector(".name").innerText = ride.name;
+  slideElement.querySelector(".land").innerText = ride.land;
+
+  // image
+  var img = rideImages[ride.id] || "images/default.jpg";
+  slideElement.querySelector(".image").src = img;
+}
+
 // display one ride
+
 function showNext() {
   if (rideList.length === 0) return;
+  var currentSlide = document.querySelectorAll(".slide")[0];
+  var nextSlide = document.querySelectorAll(".slide")[1];
+  var carousel = document.getElementById("carousel");
   var ride = rideList[currentIndex];
-  document.getElementById("name").innerText = ride.name;
-  document.getElementById("land").innerText = ride.land;
 
-  // wait display
-  if (ride.wait === "Closed") {
-    document.getElementById("waitNumber").innerText = "--";
-    document.getElementById("waitLabel").innerText = "Closed";
-    document.getElementById("waitNumber").style.color = "#888";
-  } else {
-    var waitNum =ride.wait;
-    document.getElementById("waitNumber").innerText = waitNum;
-    document.getElementById("waitLabel").innerText = "minutes";
+  // prepare next slide content
+  updateSlide(nextSlide, ride);
 
-    // color coding
-    var color;
-    if (waitNum <= 10) color = "green";
-    else if (waitNum <= 20) color = "lightgreen";
-    else if (waitNum <= 40) color = "yellow";
-    else if (waitNum <= 55) color = "orange";
-    else color = "#f4b400";
+  // animate upward
+  carousel.classList.add("slide-up");
 
-    document.getElementById("waitNumber").style.color = color;
-  }
+  setTimeout(function() {
+    // after animation:
+    carousel.classList.remove("slide-up");
+    // swap slide contents
+    currentSlide.innerHTML = nextSlide.innerHTML;
+    currentIndex++;
+    if (currentIndex >= rideList.length) {
+      currentIndex = 0;
+    }
+  }, 600); // match CSS duration
+  
+  var waitNum = ride.wait;
+  document.getElementById("waitNumber").innerText = waitNum;
+}
 
   // image
   
