@@ -76,9 +76,9 @@
     /* Sidebar */
     #sidebar {
       position: absolute;
-      top: 30px;
-      right: 30px;
-      width: 140px;
+      top: 40px;
+      left: 800px;
+      width: 180px;
       color: #aaa;
       font-size: 14px;
       text-align: left;
@@ -140,6 +140,8 @@
 // API Proxy
 var proxy = "https://glistening-blini-23387c.netlify.app/.netlify/functions/proxy?url=";
 
+var nextImage = new Image();
+  
 var rideToPark = {
   // WDW
   134: "Magic Kingdom",
@@ -661,6 +663,15 @@ function showNext() {
   }
 
   // image
+  
+  var nextIndex = currentIndex + 1;
+  if (nextIndex >= rideList.length) nextIndex = 0;
+  // preload next image
+  var nextRide = rideList[nextIndex];
+  if (nextRide && rideImages[nextRide.id]) {
+    nextImage.src = rideImages[nextRide.id];
+  }
+  // set current image (already cached if seen before)
   var img = rideImages[ride.id] || "images/default.jpg";
   document.getElementById("image").src = img;
 
