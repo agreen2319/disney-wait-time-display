@@ -30,27 +30,6 @@
       overflow: hidden;
       position: relative;
     }
-        
-    /* container holding both slides */
-    #carousel {
-      position: relative;
-      transition: transform 0.6s ease-in-out;
-    }
-    
-    /* each slide */
-    .slide {
-      width: 100%;
-    }
-    
-    /* vertical stacking */
-    .slide + .slide {
-      margin-top: 0;
-    }
-    
-    /* animate upward */
-    .slide-up {
-      transform: translateY(-100%);
-    }
 
     /* Title */
     #name {
@@ -122,6 +101,43 @@
       font-weight: bold;
       margin-top: 8px;
     }
+ 
+    .flip-container {
+      perspective: 1000px;
+      margin-bottom: 10px;
+    }
+    
+    .flip-inner {
+      position: relative;
+      transition: transform 0.6s ease-in-out;
+      transform-style: preserve-3d;
+    }
+    
+    .flip-container.flipping .flip-inner {
+      transform: rotateX(-90deg);
+    }
+    
+    .flip-front, .flip-back {
+      position: relative'
+      backface-visibility: hidden;
+    }
+    
+    .flip-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: rotateX(90deg);
+    }
+    
+    /* Specific sizing */
+    #name { font-size: 44px; }
+    .waitNumber { font-size: 110px; font-weight: 300; }
+    .image {
+      width: 700px;
+      height: 500px;
+      object-fit: cover;
+    }
+
 
   </style>
 </head>
@@ -138,28 +154,43 @@
   </div>
 
   <!-- Main content -->
-  
 <div id="content">
-  <div id="carousel">
-    <div class="slide">
-      <div class="name">Loading...</div>
-      <div class="land"></div>
-      <div class="mainRow">
-        <img class="image" src="images/default.jpg" />      
+
+  <div class="flip-container" id="nameFlip">
+    <div class="flip-inner">
+      <div class="flip-front" id="name">Loading...</div>
+      <div class="flip-back"></div>
+    </div>
+  </div>
+
+  <div class="flip-container" id="landFlip">
+    <div class="flip-inner">
+      <div class="flip-front" id="land"></div>
+      <div class="flip-back"></div>
+    </div>
+  </div>
+
+  <div id="mainRow">
+
+    <div class="flip-container" id="imageFlip">
+      <div class="flip-inner">
+        <img class="flip-front image" src="images/default.jpg" />
+        <img class="flip-back image" src="images/default.jpg" />
       </div>
     </div>
-    
-    <div class="slide">
-      <div class="name"></div>
-      <div class="land"></div>
-      <div class="mainRow">
-        <img class="image" src="images/default.jpg" />
 
+    <div id="waitBlock">
+      <div class="flip-container" id="waitFlip">
+        <div class="flip-inner">
+          <div class="flip-front waitNumber">--</div>
+          <div class="flip-back waitNumber"></div>
+        </div>
       </div>
+
+      <div id="waitLabel">minutes</div>
     </div>
   </div>
 </div>
-
 
 <script>
 
@@ -660,66 +691,40 @@ function renderClosed(closedRides, closedParks) {
   }
 }
 
-var showingFirst = true;
-
-function updateSlide(slideElement, ride) {
-  slideElement.querySelector(".name").innerText = ride.name;
-  slideElement.querySelector(".land").innerText = ride.land;
-
-  // image
-  var img = rideImages[ride.id] || "images/default.jpg";
-  slideElement.querySelector(".image").src = img;
-}
-
 // display one ride
+function flipElement(containerId, newValue, isImage) {
+  var container = document.getElementById(containerId);
+  var front = container.querySelector(".flip-front");
+  var back = container.querySelector(".flip-back");
+  if (isImage) {
+    back.src = newValue;
+  } else {
+    back.innerText = newValue;
+  }
+  container.classList.add("flipping");
+  setTimeout(function() {
+    if (isImage) {
+      front.src = newValue;
+    } else {
+      front.innerText = newValue;
+    }
+    container.classList.remove("flipping");
+  }, 600);
+}
 
 function showNext() {
   if (rideList.length === 0) return;
-  var currentSlide = document.querySelectorAll(".slide")[0];
-  var nextSlide = document.querySelectorAll(".slide")[1];
-  var carousel = document.getElementById("carousel");
   var ride = rideList[currentIndex];
-
-  // prepare next slide content
-  updateSlide(nextSlide, ride);
-
-  // animate upward
-  carousel.classList.add("slide-up");
-
-  setTimeout(function() {
-    // after animation:
-    carousel.classList.remove("slide-up");
-    // swap slide contents
-    currentSlide.innerHTML = nextSlide.innerHTML;
-    currentIndex++;
-    if (currentIndex >= rideList.length) {
-      currentIndex = 0;
-    }
-  }, 600); // match CSS duration
-  
-  var waitNum = ride.wait;
-  document.getElementById("waitNumber").innerText = waitNum;
-}
-
-  // image
-  
-  var nextIndex = currentIndex + 1;
-  if (nextIndex >= rideList.length) nextIndex = 0;
-  // preload next image
-  var nextRide = rideList[nextIndex];
-  if (nextRide && rideImages[nextRide.id]) {
-    nextImage.src = rideImages[nextRide.id];
-  }
-  // set current image (already cached if seen before)
+  flipElement("nameFlip", ride.name);
+  flipElement("landFlip", ride.land);
   var img = rideImages[ride.id] || "images/default.jpg";
-  document.getElementById("image").src = img;
-
+  flipElement("imageFlip", img, true);
+  flipElement("waitFlip", ride.wait);
   currentIndex++;
   if (currentIndex >= rideList.length) {
     currentIndex = 0;
   }
 }
-
 
 // refresh data every minute
 fetchTimes();
