@@ -136,8 +136,14 @@
     
     /* back starts hidden behind */
     .flip-back {
-      transform: rotateX(180deg);
+      transform: rotateX(90deg);
       transition: transform 0.15s ease;
+    }
+    
+    /* image uses 180-degree flip instead */
+    #imageFlip .flip-back,
+    .flip-back.image {
+      transform: rotateX(180deg);
     }
 
     /* special behavior for image flip */
