@@ -26,7 +26,7 @@
     
     /* Main content LEFT aligned */
     #content {
-      width: 700px;
+      width: 900px;
       overflow: hidden;
       position: relative;
     }
@@ -706,24 +706,31 @@ function renderClosed(closedRides, closedParks) {
 }
 
 // display one ride
+
 function flipElement(containerId, newValue, isImage) {
   var container = document.getElementById(containerId);
+  var inner = container.querySelector(".flip-inner");
   var front = container.querySelector(".flip-front");
   var back = container.querySelector(".flip-back");
+  // set back content
   if (isImage) {
     back.src = newValue;
   } else {
     back.innerText = newValue;
   }
-  container.classList.add("flipping");
+  // animate down
+  inner.style.transition = "transform 0.55s cubic-bezier(0.25, 1.5, 0.5, 1)";
+  inner.style.transform = "rotateX(-90deg)";
   setTimeout(function() {
+    // swap content onto front
     if (isImage) {
       front.src = newValue;
     } else {
       front.innerText = newValue;
     }
-    // reset for next cycle
-    container.classList.remove("flipping");
+    // reset instantly WITHOUT animation
+    inner.style.transition = "none";
+    inner.style.transform = "rotateX(0deg)";
   }, 550);
 }
 
