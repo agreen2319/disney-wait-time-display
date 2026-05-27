@@ -114,10 +114,6 @@
       transition: transform 0.55s cubic-bezier(0.25, 1.5, 0.5, 1);
     }
     
-    .flip-container.flipping .flip-inner {
-      transform: rotateX(-90deg);
-    }
-    
     .flip-front, .flip-back {
       position: absolute;
       top: 0;
@@ -140,8 +136,13 @@
     
     /* back starts hidden behind */
     .flip-back {
-      transform: rotateX(90deg);
+      transform: rotateX(180deg);
       transition: transform 0.15s ease;
+    }
+
+    /* special behavior for image flip */
+    .image-flip-mode {
+      transform-origin: center center;
     }
     
     /* Specific sizing */
@@ -713,22 +714,26 @@ function flipElement(containerId, newValue, isImage) {
   var front = container.querySelector(".flip-front");
   var back = container.querySelector(".flip-back");
   // set back content
-  if (isImage) {
-    // preload first
-    var imgLoader = new Image();
-    imgLoader.onload = function() {
-      // only set + animate once fully loaded
-      back.src = newValue;
-      inner.style.transition = "transform 0.55s cubic-bezier(0.25, 1.5, 0.5, 1)";
-      inner.style.transform = "rotateX(-90deg)";
-      setTimeout(function() {
-        front.src = newValue;
-        inner.style.transition = "none";
-        inner.style.transform = "rotateX(0deg)";
-      }, 550);
-    };
-    imgLoader.src = newValue;
-    return; // stop normal flow
+
+if (isImage) {
+  var imgLoader = new Image();
+  imgLoader.onload = function() {
+    back.src = newValue;
+    // enable center rotation
+    inner.classList.add("image-flip-mode");
+    // rotate full 180 instead of 90
+    inner.style.transition = "transform 0.55s cubic-bezier(0.25, 1.5, 0.5, 1)";
+    inner.style.transform = "rotateX(-180deg)";
+    setTimeout(function() {
+      front.src = newValue;
+      // reset instantly
+      inner.style.transition = "none";
+      inner.style.transform = "rotateX(0deg)";
+      inner.classList.remove("image-flip-mode");
+    }, 550);
+  };
+  imgLoader.src = newValue;
+  return;
 
   } else {
     back.innerText = newValue;
