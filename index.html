@@ -714,10 +714,24 @@ function flipElement(containerId, newValue, isImage) {
   var back = container.querySelector(".flip-back");
   // set back content
   if (isImage) {
-    back.src = newValue;
+    // preload first
+    var imgLoader = new Image();
+    imgLoader.onload = function() {
+      // only set + animate once fully loaded
+      back.src = newValue;
+      inner.style.transition = "transform 0.55s cubic-bezier(0.25, 1.5, 0.5, 1)";
+      inner.style.transform = "rotateX(-90deg)";
+      setTimeout(function() {
+        front.src = newValue;
+        inner.style.transition = "none";
+        inner.style.transform = "rotateX(0deg)";
+      }, 550);
+    };
+    imgLoader.src = newValue;
+    return; // stop normal flow
+
   } else {
     back.innerText = newValue;
-  
     if (containerId === "waitFlip") {
       var color = getWaitColor(newValue);
       back.style.color = color;
