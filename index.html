@@ -5,72 +5,99 @@
   <title>Disney Ride Display</title>
 
   <style>
+        
     body {
-      background: #111;
-      color: white;
-      font-family: Arial;
-      height: 100vh;
+      background: #222;
       margin: 0;
+      font-family: Arial;
     }
-
-    #card {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
+    
+    /* 4:3 iPad-like frame */
+    #frame {
+      width: 1024px;
+      height: 768px;
+      background: #000;
+      margin: auto;
+      position: relative;
+      color: white;
+      padding: 40px;
+      box-sizing: border-box;
     }
-
+    
+    /* Main content LEFT aligned */
+    #content {
+      width: 700px;
+    }
+    
+    /* Title */
     #name {
-      font-size: 36px;
-      margin-bottom: 10px;
+      font-size: 44px;
+      margin-bottom: 12px;
     }
-
+    
+    /* Subtitle */
     #land {
       font-size: 20px;
       color: #ccc;
-      margin-bottom: 10px;
-    }
-
-    #wait {
-      font-size: 28px;
-    }
-
-    #container {
-      display: flex;
-      align-items: center;
+      margin-bottom: 25px;
     }
     
-    /* Main card stays centered-ish */
-    #card {
+    /* Row: image + wait */
+    #mainRow {
+      display: flex;
+      align-items: center; /* vertical alignment with image */
+    }
+    
+    /* Image (7:5 ratio) */
+    #image {
+      width: 700px;
+      height: 500px; /* 7:5 ratio */
+      object-fit: cover;
+    }
+    
+    /* Wait block */
+    #waitBlock {
+      margin-left: 50px;
       text-align: center;
-      margin-right: 50px;
+    }
+    
+    /* Big number */
+    #waitNumber {
+      font-size: 110px;
+      font-weight: 300;
+    }
+    
+    /* Label */
+    #waitLabel {
+      font-size: 20px;
+      margin-top: 5px;
     }
     
     /* Sidebar */
     #sidebar {
-      position: fixed;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-    
-      width: 200px;
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      width: 140px;
       color: #aaa;
       font-size: 14px;
-
-      border-left: 1px solid #333;
-      padding-left: 15px;
+      text-align: left;
     }
     
-    #sidebar h3 {
+    /* Sidebar header */
+    .sidebar-title {
       margin-bottom: 10px;
-      border-bottom: 1px solid #444;
-      padding-bottom: 5px;
     }
     
-    /* Closed ride items */
+    /* Closed ride */
     .closed-ride {
-      margin-bottom: 5px;
+      margin-bottom: 4px;
+    }
+    
+    /* Closed parks (bold at bottom) */
+    .closed-park {
+      font-weight: bold;
+      margin-top: 8px;
     }
 
   </style>
@@ -78,22 +105,35 @@
 
 <body>
 
-<div id="container">
+<div id="frame">
 
-  <!-- Main rotating display -->
-  <div id="card">
-    <div id="name">Loading...</div>
-    <div id="land"></div>
-    <div id="wait"></div>
+  <!-- Closed sidebar -->
+  <div id="sidebar">
+    <div class="sidebar-title">Closed:</div>
+    <div id="closedList"></div>
+    <div id="closedParks"></div>
   </div>
 
-  <!-- Closed rides sidebar -->
-  <div id="sidebar">
-    <h3>Closed:</h3>
-    <div id="closedList"></div>
+  <!-- Main content -->
+  <div id="content">
+
+    <div id="name">Loading...</div>
+    <div id="land"></div>
+
+    <div id="mainRow">
+
+      <img id="image" src="images/default.jpg" />
+      <div id="waitBlock">
+        <div id="waitNumber">--</div>
+        <div id="waitLabel">minutes</div>
+      </div>
+
+    </div>
+
   </div>
 
 </div>
+
 
 <script>
 
@@ -280,9 +320,7 @@ var rideToLand = {
 // Different display names for closed rides
 var closedRideNames = {
 
-  // --------------------
   // Magic Kingdom
-  // --------------------
   134: "Jungle Cruise - MK",
   137: "Pirates - MK",
   133: "Small World - MK",
@@ -302,9 +340,7 @@ var closedRideNames = {
   1190: "PeopleMover",
   11527: "TRON",
 
-  // --------------------
   // Hollywood Studios
-  // --------------------
   6361: "Runaway Railway - HS",
   5476: "Slinky Dog Dash",
   117: "Toy Story Mania",
@@ -314,9 +350,7 @@ var closedRideNames = {
   6368: "Smugglers Run - HS",
   6369: "Rise of the Resistance - HS",
 
-  // --------------------
   // EPCOT
-  // --------------------
   10916: "Guardians - Cosmic Rewind",
   155: "Journey into Imagination",
   156: "Living with the Land",
@@ -327,18 +361,14 @@ var closedRideNames = {
   159: "Spaceship Earth",
   160: "Test Track",
 
-  // --------------------
   // Animal Kingdom
-  // --------------------
   4439: "Flight of Passage",
   110: "Expedition Everest",
   112: "Kali River Rapids",
   113: "Kilimanjaro Safari",
   4438: "Na'vi River Journey",
 
-  // --------------------
   // Disneyland
-  // --------------------
   323: "Big Thunder - DL",
   296: "Jungle Cruise - DL",
   326: "Indiana Jones",
@@ -368,9 +398,7 @@ var closedRideNames = {
   284: "Space Mountain - DL",
   286: "Star Tours - DL",
 
-  // --------------------
   // DCA
-  // --------------------
   329: "Guardians - Mission Breakout",
   8843: "Web Slingers",
   295: "Radiator Springs Racers",
@@ -383,7 +411,101 @@ var closedRideNames = {
   313: "Midway Mania"
 };
 
+  // images used for each ride
+var rideImages = {
 
+  // Magic Kingdom
+  134: "images/134.jpg", // Jungle Cruise
+  137: "images/137.jpg", // Pirates of the Caribbean
+  133: "images/133.jpg", // it's a small world
+  132: "images/132.jpg", // Dumbo the Flying Elephant
+  127: "images/127.jpg", // Under the Sea – Little Mermaid
+  136: "images/136.jpg", // Peter Pan's Flight
+  129: "images/129.jpg", // Seven Dwarfs Mine Train
+  126: "images/126.jpg", // The Barnstormer
+  142: "images/142.jpg", // The Many Adventures of Winnie the Pooh
+  130: "images/130.jpg", // Big Thunder Mountain Railroad
+  13630: "images/13630.jpg", // Tiana's Bayou Adventure
+  140: "images/140.jpg", // Haunted Mansion
+  248: "images/248.jpg", // Astro Orbiter
+  131: "images/131.jpg", // Buzz Lightyear's Space Ranger Spin
+  138: "images/138.jpg", // Space Mountain
+  143: "images/143.jpg", // Tomorrowland Speedway
+  1190: "images/1190.jpg", // Tomorrowland Transit Authority PeopleMover
+  11527: "images/11527.jpg", // TRON Lightcycle Run
+
+  // Hollywood Studios
+  6361: "images/6361.jpg", // Mickey & Minnie's Runaway Railway
+  5476: "images/5476.jpg", // Slinky Dog Dash
+  117: "images/117.jpg", // Toy Story Midway Mania
+  16342: "images/16342.jpg", // Rock ‘n’ Roller Coaster
+  123: "images/123.jpg", // Tower of Terror
+  120: "images/120.jpg", // Star Tours (HS)
+  6368: "images/6368.jpg", // Smugglers Run (HS)
+  6369: "images/6369.jpg", // Rise of the Resistance (HS)
+
+  // EPCOT
+  10916: "images/10916.jpg", // Guardians of the Galaxy: Cosmic Rewind
+  155: "images/155.jpg", // Journey Into Imagination with Figment
+  156: "images/156.jpg", // Living with the Land
+  158: "images/158.jpg", // Mission: SPACE
+  10914: "images/10914.jpg", // Remy's Ratatouille Adventure
+  153: "images/153.jpg", // The Seas with Nemo & Friends
+  151: "images/151.jpg", // Soarin'
+  159: "images/159.jpg", // Spaceship Earth
+  160: "images/160.jpg", // Test Track
+
+  // Animal Kingdom
+  4439: "images/4439.jpg", // Avatar Flight of Passage
+  110: "images/110.jpg", // Expedition Everest
+  112: "images/112.jpg", // Kali River Rapids
+  113: "images/113.jpg", // Kilimanjaro Safaris
+  4438: "images/4438.jpg", // Na'vi River Journey
+
+  // Disneyland Park
+  323: "images/323.jpg", // Big Thunder Mountain Railroad (DL)
+  296: "images/296.jpg", // Jungle Cruise (DL)
+  326: "images/326.jpg", // Indiana Jones Adventure
+  306: "images/306.jpg", // Winnie the Pooh (DL)
+  14168: "images/14168.jpg", // Tiana's Bayou Adventure (DL)
+  13958: "images/13958.jpg", // Haunted Mansion (DL)
+  289: "images/289.jpg", // Pirates of the Caribbean (DL)
+  307: "images/307.jpg", // it's a small world (DL)
+  285: "images/285.jpg", // Alice in Wonderland
+  303: "images/303.jpg", // Casey Jr. Circus Train
+  275: "images/275.jpg", // Dumbo (DL)
+  279: "images/279.jpg", // Matterhorn Bobsleds
+  280: "images/280.jpg", // Mr. Toad’s Wild Ride
+  281: "images/281.jpg", // Peter Pan’s Flight (DL)
+  282: "images/282.jpg", // Pinocchio’s Daring Journey
+  283: "images/283.jpg", // Snow White’s Enchanted Wish
+  305: "images/305.jpg", // Storybook Land Canal Boats
+  324: "images/324.jpg", // Chip 'n' Dale Gadget Coaster
+  11526: "images/11526.jpg", // Runaway Railway (DL)
+  332: "images/332.jpg", // Roger Rabbit’s Car Toon Spin
+  6339: "images/6339.jpg", // Smugglers Run (DL)
+  6340: "images/6340.jpg", // Rise of the Resistance (DL)
+  287: "images/287.jpg", // Astro Orbitor (DL)
+  317: "images/317.jpg", // Autopia (DL)
+  273: "images/273.jpg", // Buzz Lightyear Astro Blasters
+  276: "images/276.jpg", // Finding Nemo Submarine Voyage
+  284: "images/284.jpg", // Space Mountain / Hyperspace Mountain (DL)
+  286: "images/286.jpg", // Star Tours (DL)
+
+  // Disney California Adventure
+  329: "images/329.jpg", // Guardians of the Galaxy - Mission: BREAKOUT!
+  8843: "images/8843.jpg", // WEB SLINGERS
+  295: "images/295.jpg", // Radiator Springs Racers
+  312: "images/312.jpg", // Soarin' Over California
+  302: "images/302.jpg", // Grizzly River Run
+  291: "images/291.jpg", // Monsters Inc. Mike & Sulley to the Rescue!
+  316: "images/316.jpg", // The Little Mermaid – Ariel's Undersea Adventure
+  319: "images/319.jpg", // Goofy's Sky School
+  322: "images/322.jpg", // Incredicoaster
+  313: "images/313.jpg"  // Toy Story Midway Mania
+};
+
+  
 // store rides
 var rideList = [];
 var currentIndex = 0;
@@ -425,7 +547,6 @@ function fetchTimes() {
 
 
 // build ordered list
-
 function process(allData) {
   rideList = [];
   var closedRides = [];
@@ -446,9 +567,10 @@ function process(allData) {
         parkTotals[park]++;
         if (ride.is_open) {
           rideList.push({
+            id: ride.id,
             name: ride.name,
             land: mappedLand,
-            wait: ride.wait_time + " min"
+            wait: ride.wait_time
           });
         } else {
           closedRides.push({
@@ -482,32 +604,30 @@ function process(allData) {
 
 
 function renderClosed(closedRides, closedParks) {
-  var container = document.getElementById("closedList");
-  container.innerHTML = "";
-  
-  // Render closed rides
+  var listContainer = document.getElementById("closedList");
+  var parksContainer = document.getElementById("closedParks");
+
+  listContainer.innerHTML = "";
+  parksContainer.innerHTML = "";
+  // Closed rides
   closedRides.forEach(function(ride) {
     var div = document.createElement("div");
     div.className = "closed-ride";
     var name = closedRideNames[ride.id] || ride.name;
     div.innerText = name;
-    container.appendChild(div);
+    listContainer.appendChild(div);
   });
-
-  // Add divider if there are closed parks
+  // Closed parks
   if (closedParks.length > 0) {
     var divider = document.createElement("div");
     divider.style.marginTop = "15px";
     divider.style.borderTop = "1px solid #444";
-    container.appendChild(divider);
-
-    // Render closed parks
+    listContainer.appendChild(divider);
     closedParks.forEach(function(park) {
       var div = document.createElement("div");
-      div.style.fontWeight = "bold";
-      div.style.marginTop = "8px";
+      div.className = "closed-park";
       div.innerText = park;
-      container.appendChild(div);
+      parksContainer.appendChild(div);
     });
   }
 }
@@ -515,12 +635,34 @@ function renderClosed(closedRides, closedParks) {
 // display one ride
 function showNext() {
   if (rideList.length === 0) return;
-
   var ride = rideList[currentIndex];
-
   document.getElementById("name").innerText = ride.name;
   document.getElementById("land").innerText = ride.land;
-  document.getElementById("wait").innerText = ride.wait;
+
+  // wait display
+  if (ride.wait === "Closed") {
+    document.getElementById("waitNumber").innerText = "--";
+    document.getElementById("waitLabel").innerText = "Closed";
+    document.getElementById("waitNumber").style.color = "#888";
+  } else {
+    var waitNum =ride.wait;
+    document.getElementById("waitNumber").innerText = waitNum;
+    document.getElementById("waitLabel").innerText = "minutes";
+
+    // color coding
+    var color;
+    if (waitNum <= 10) color = "green";
+    else if (waitNum <= 20) color = "lightgreen";
+    else if (waitNum <= 40) color = "yellow";
+    else if (waitNum <= 55) color = "orange";
+    else color = "#f4b400";
+
+    document.getElementById("waitNumber").style.color = color;
+  }
+
+  // image
+  var img = rideImages[ride.id] || "images/default.jpg";
+  document.getElementById("image").src = img;
 
   currentIndex++;
   if (currentIndex >= rideList.length) {
