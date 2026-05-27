@@ -469,7 +469,15 @@ function process(allData) {
       closedParks.push(park);
     }
   });
-  renderClosed(closedRides, closedParks);
+
+  // remove rides in the closed section that are in closed parks  
+  var filteredClosedRides = closedRides.filter(function(ride) {
+    var park = rideToPark[ride.id];
+    return closedParks.indexOf(park) === -1;
+  });
+  
+  renderClosed(filteredClosedRides, closedParks);
+
 }
 
 
