@@ -38,7 +38,7 @@
     }
     
     /* Subtitle */
-    #land {
+    .land {
       font-size: 20px;
       color: #ccc;
       margin-bottom: 25px;
@@ -145,7 +145,7 @@
     }
     
     /* Specific sizing */
-    #name { font-size: 44px; }
+    .name { font-size: 44px; margin-bottom: 12px;}
     .waitNumber { font-size: 110px; font-weight: 300; }
     .image {
       width: 700px;
@@ -173,15 +173,15 @@
 
   <div class="flip-container" id="nameFlip">
     <div class="flip-inner">
-      <div class="flip-front" id="name">Loading...</div>
-      <div class="flip-back"></div>
+      <div class="flip-front name">Loading...</div>
+      <div class="flip-back name"></div>
     </div>
   </div>
 
   <div class="flip-container" id="landFlip">
     <div class="flip-inner">
-      <div class="flip-front" id="land"></div>
-      <div class="flip-back"></div>
+      <div class="flip-front land"></div>
+      <div class="flip-back land"></div>
     </div>
   </div>
 
