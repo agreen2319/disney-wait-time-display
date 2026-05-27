@@ -50,13 +50,30 @@
       align-items: center; /* vertical alignment with image */
     }
     
-    /* Image (7:5 ratio) */
-    #image {
+    /* Image */
+    .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+    #imageFlip {
       width: 700px;
-      height: 500px; /* 7:5 ratio */
-      object-fit: cover;
+      height: 500px;
     }
     
+    #imageFlip .flip-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    
+    #imageFlip .flip-front,
+    #imageFlip .flip-back {
+      width: 100%;
+      height: 100%;
+    }
+
     /* Wait block */
     #waitBlock {
       margin-left: 50px;
@@ -131,7 +148,7 @@
     /* front stays normal */
     .flip-front {
       transform: rotateX(0deg);
-      position: relative;
+      position: absolute;
     }
     
     /* back starts hidden behind */
