@@ -750,33 +750,34 @@ function flipElement(containerId, newValue, isImage) {
   var back = container.querySelector(".flip-back");
   // set back content
 
-if (isImage) {
-  var imgLoader = new Image();
-  imgLoader.onload = function() {
-    back.src = newValue;
-    // enable center rotation
-    inner.classList.add("image-flip-mode");
-    // rotate full 180 instead of 90
-    inner.style.transition = "transform 0.55s cubic-bezier(0.25, 1.5, 0.5, 1)";
-    inner.style.transform = "rotateX(-180deg)";
-    setTimeout(function() {
-      front.src = newValue;
-      // reset instantly
-      inner.style.transition = "none";
-      inner.style.transform = "rotateX(0deg)";
-      inner.classList.remove("image-flip-mode");
-    }, 550);
-  };
-  imgLoader.src = newValue;
-  return;
+  if (isImage) {
+    var imgLoader = new Image();
+    imgLoader.onload = function() {
+      back.src = newValue;
+      // enable center rotation
+      inner.classList.add("image-flip-mode");
+      // rotate full 180 instead of 90
+      inner.style.transition = "transform 0.55s cubic-bezier(0.25, 1.5, 0.5, 1)";
+      inner.style.transform = "rotateX(-180deg)";
+      setTimeout(function() {
+        front.src = newValue;
+        // reset instantly
+        inner.style.transition = "none";
+        inner.style.transform = "rotateX(0deg)";
+        inner.classList.remove("image-flip-mode");
+      }, 550);
+    };
+    imgLoader.src = newValue;
+    return;
 
   } else {
-    back.innerText = newValue;
     if (containerId === "waitFlip") {
+      newValue = formatWait(newValue);
       var color = getWaitColor(newValue);
       back.style.color = color;
       front.style.color = color;
     }
+    back.innerText = newValue;
   }
   // animate down
   inner.style.transition = "transform 0.55s cubic-bezier(0.25, 1.5, 0.5, 1)";
@@ -792,6 +793,10 @@ if (isImage) {
     inner.style.transition = "none";
     inner.style.transform = "rotateX(0deg)";
   }, 550);
+}
+  
+function formatWait(wait) {
+  return wait < 10 ? "0" + wait : wait;
 }
 
 function getWaitColor(wait) {
@@ -813,7 +818,7 @@ function showNext() {
     document.querySelector("#landFlip .flip-front").innerText = ride.land;
     document.querySelector("#imageFlip .flip-front").src = img;
     var waitFront = document.querySelector("#waitFlip .flip-front");
-    waitFront.innerText = ride.wait;
+    waitFront.innerText = formatWait(ride.wait);
     waitFront.style.color = getWaitColor(ride.wait);
     firstRun = false;
   } else {
