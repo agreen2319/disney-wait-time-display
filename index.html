@@ -249,6 +249,101 @@
 var proxy = "https://glistening-blini-23387c.netlify.app/.netlify/functions/proxy?url=";
 
 var nextImage = new Image();
+
+// ride display names
+var rideDisplayNames = {
+
+  // Magic Kingdom
+  134: "Jungle Cruise\n",
+  137: "Pirates of the Caribbean\n",
+  133: "it's a small world\n",
+  132: "Dumbo the Flying Elephant\n",
+  127: "Under the Sea – Journey of the\nLittle Mermaid",
+  136: "Peter Pan's Flight\n",
+  129: "Seven Dwarfs Mine Train\n",
+  126: "The Barnstormer\n",
+  142: "The Many Adventures of\nWinnie the Pooh",
+  130: "Big Thunder Mountain Railroad\n",
+  13630: "Tiana's Bayou Adventure\n",
+  140: "Haunted Mansion\n",
+  248: "Astro Orbiter\n",
+  131: "Buzz Lightyear's Space Ranger Spin\n",
+  138: "Space Mountain\n",
+  143: "Tomorrowland Speedway\n",
+  1190: "Tomorrowland Transit Authority\nPeopleMover",
+  11527: "TRON Lightcycle / Run\n",
+
+  // Hollywood Studios
+  6361: "Mickey & Minnie's Runaway Railway",
+  5476: "Slinky Dog Dash",
+  117: "Toy Story Mania!",
+  16342: "Rock 'n' Roller Coaster\nStarring The Muppets",
+  123: "The Twilight Zone\nTower of Terror",
+  120: "Star Tours - The Adventures\nContinue",
+  6368: "Millenium Falcon:\nSmugglers Run",
+  6369: "Star Wars: Rise of the Resistance",
+
+  // EPCOT
+  10916: "Guardians of the Galaxy:\nCosmic Rewind",
+  155: "Journey Into Imagination with Figment\n",
+  156: "Living with the Land\n",
+  158: "Mission: SPACE\n",
+  10914: "Remy's Ratatouille Adventure\n",
+  153: "The Seas with Nemo & Friends\n",
+  151: "Soarin'\n",
+  159: "Spaceship Earth\n",
+  160: "Test Track\n",
+
+  // Animal Kingdom
+  4439: "Avatar Flight of Passage\n",
+  110: "Expedition Everest: Legend of the\nForbidden Mountain",
+  112: "Kali River Rapids\n",
+  113: "Kilimanjaro Safaris\n",
+  4438: "Na'vi River Journey\n",
+
+  // Disneyland
+  323: "Big Thunder Mountain Railroad\n",
+  296: "Jungle Cruise\n",
+  326: "Indiana Jones Adventure\n",
+  306: "The Many Adventures of\nWinnie the Pooh",
+  14168: "Tiana's Bayou Adventure\n",
+  13958: "Haunted Mansion\n",
+  289: "Pirates of the Caribbean",
+  307: "it's a small world\n",
+  285: "Alice in Wonderland\n",
+  303: "Casey Jr. Circus Train\n",
+  275: "Dumbo the Flying Elephant\n",
+  279: "Matterhorn Bobsleds\n",
+  280: "Mr. Toad’s Wild Ride\n",
+  281: "Peter Pan’s Flight\n",
+  282: "Pinocchio’s Daring Journey\n",
+  283: "Snow White’s Enchanted Wish\n",
+  305: "Storybook Land Canal Boats\n",
+  324: "Chip 'n' Dale Gadget Coaster\n",
+  11526: "Mickey & Minnie's Runaway Railway\n",
+  332: "Roger Rabbit’s Car Toon Spin\n",
+  6339: "Milennium Falcon:\nSmugglers Run",
+  6340: "Star Wars: Rise of the Resistance\n",
+  287: "Astro Orbitor\n",
+  317: "Autopia\n",
+  273: "Buzz Lightyear Astro Blasters\n",
+  276: "Finding Nemo Submarine Voyage\n",
+  284: "Space Mountain\n",
+  286: "Star Tours - The Adventures\nContinue",
+
+  // California Adventure
+  329: "Guardians of the Galaxy -\nMission: BREAKOUT!",
+  8843: "Spider Man\nWEB SLINGERS",
+  295: "Radiator Springs Racers",
+  312: "Soarin'\n",
+  302: "Grizzly River Run\n",
+  291: "Monsters Inc.\nMike & Sulley to the Rescue!",
+  316: "The Little Mermaid – Ariel's\nUndersea Adventure",
+  319: "Goofy's Sky School\n",
+  322: "Incredicoaster\n",
+  313: "Toy Story Midway Mania!\n"
+};
+
   
 var rideToPark = {
   // WDW
@@ -678,7 +773,7 @@ function process(allData) {
         if (ride.is_open) {
           rideList.push({
             id: ride.id,
-            name: ride.name,
+            name: rideDisplayNames[ride.id] || ride.name,
             land: mappedLand,
             wait: ride.wait_time
           });
