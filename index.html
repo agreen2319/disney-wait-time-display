@@ -250,12 +250,11 @@
 
 // API Proxy
 var proxy = "https://glistening-blini-23387c.netlify.app/.netlify/functions/proxy?url=";
-
 var nextImage = new Image();
-
+var hasShuffled = false;
+  
 // ride display names
 var rideDisplayNames = {
-
   // Magic Kingdom
   134: "Jungle Cruise",
   137: "Pirates of the Caribbean",
@@ -803,6 +802,12 @@ function fetchTimes() {
   });
 }
 
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
 
 // build ordered list
 function process(allData) {
@@ -855,7 +860,10 @@ function process(allData) {
     var park = rideToPark[ride.id];
     return closedParks.indexOf(park) === -1;
   });
-  
+  if(!hasShuffled) {
+    shuffleArray(rideList);
+    hasShuffled = true;
+  }
   renderClosed(filteredClosedRides, closedParks);
 
 }
