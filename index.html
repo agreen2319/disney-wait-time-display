@@ -77,9 +77,9 @@
 
     /* Wait block */
     #waitBlock {
-      margin-left: 80px;
+      margin-left: 60px;
       text-align: center;
-      width: 200px;
+      width: 210px;
     }
     
     /* Big number */
@@ -105,7 +105,6 @@
     #waitFlip .flip-back {
       width: 100%;
       text-align: center;
-      padding-left: 10px;
     }
     
     /* Sidebar */
@@ -315,6 +314,7 @@ var rideDisplayNames = {
   289: "Pirates of the Caribbean",
   307: "\"it's a small world\"",
   285: "Alice in Wonderland",
+  278: "Mad Tea Party",
   303: "Casey Jr. Circus Train",
   275: "Dumbo the Flying Elephant",
   279: "Matterhorn Bobsleds",
@@ -322,6 +322,7 @@ var rideDisplayNames = {
   281: "Peter Pan’s Flight",
   282: "Pinocchio’s Daring Journey",
   283: "Snow White’s Enchanted Wish",
+  277: "King Arthur Carrousel",
   305: "Storybook Land Canal Boats",
   324: "Chip 'n' Dale's GADGETcoaster",
   11526: "Mickey & Minnie's Runaway Railway",
@@ -334,18 +335,26 @@ var rideDisplayNames = {
   276: "Finding Nemo Submarine Voyage",
   284: "Space Mountain",
   286: "Star Tours",
+  274: "Disneyland Monorail",
 
   // California Adventure
   329: "Guardians of the Galaxy",
   8843: "Spider-Man: WEB SLINGERS",
   295: "Radiator Springs Racers",
+  13961: "Luigi's Rollickin' Roadsters",
+  315: "Mater's Junkyard Jamboree",
   312: "Soarin'",
   302: "Grizzly River Run",
   291: "Monsters Inc.",
   316: "The Little Mermaid",
   319: "Goofy's Sky School",
+  298: "Golden Zephyr",
+  300: "Jumpin' Jellyfish",
   322: "Incredicoaster",
   313: "Toy Story Midway Mania!"
+  310: "Jessie's Critter Carousel",
+  311: "Pixar Pal-A-Round: Swinging",
+  5557: "Pixar Pal-A-Round: Non-Swinging"
 };
 
   
@@ -421,6 +430,9 @@ var rideToPark = {
   276: "Disneyland",
   284: "Disneyland",
   286: "Disneyland",
+  274: "Disneyland",
+  277: "Disneyland",
+  278: "Disneyland",
   329: "California Adventure",
   8843: "California Adventure",
   295: "California Adventure",
@@ -430,7 +442,14 @@ var rideToPark = {
   316: "California Adventure",
   319: "California Adventure",
   322: "California Adventure",
-  313: "California Adventure"
+  313: "California Adventure",
+  298: "California Adventure",
+  310: "California Adventure",
+  300: "California Adventure",
+  13961: "California Adventure",
+  315: "California Adventure",
+  311: "California Adventure",
+  5557: "California Adventure"
 };
   
 var rideToLand = {
@@ -500,6 +519,8 @@ var rideToLand = {
   282: "Disneyland - Fantasyland", // Pinocchio's Daring Journey
   283: "Disneyland - Fantasyland", // Snow White's Enchanted Wish
   305: "Disneyland - Fantasyland", // Storybook Land Canal Boats
+  277: "Disneyland - Fantasyland", // King Arthur Carrousel
+  278: "Disneyland - Fantasyland", // Mad Tea Party
   324: "Disneyland - Toontown", // Gadget Coaster
   11526: "Disneyland - Toontown", // Runaway Railway
   332: "Disneyland - Toontown", // Roger Rabbit
@@ -511,16 +532,24 @@ var rideToLand = {
   276: "Disneyland - Tomorrowland", // Finding Nemo Submarine Voyage
   284: "Disneyland - Tomorrowland", // Space Mountain
   286: "Disneyland - Tomorrowland", // Star Tours
+  274: "Disneyland - Tomorrowland", // Monorail
 
   // Disney California Adventure (DCA)
   329: "California Adventure - Avengers Campus", // Guardians of the Galaxy - Mission: BREAKOUT!
   8843: "California Adventure - Avengers Campus", // WEB SLINGERS
   295: "California Adventure - Cars Land", // Radiator Springs Racers
+  13961: "California Adventure - Cars Land", // Luigi's
+  315: "California Adventure - Cars Land", // Mater's
   312: "California Adventure - Grizzly Peak", // Soarin' Over California
   302: "California Adventure - Grizzly Peak", // Grizzly River Run
   291: "California Adventure - Hollywood Land", // Mike & Sulley
   316: "California Adventure - Paradise Gardens Park", // Ariel
   319: "California Adventure - Paradise Gardens Park", // Goofy's Sky School
+  298: "California Adventure - Paradise Gardens Park", // Zephyr
+  300: "California Adventure - Paradise Gardens Park", // Jellyfish
+  310: "California Adventure - Pixar Pier", // Jessie's
+  311: "California Adventure - Pixar Pier", // Palaround - Swinging
+  5557: "California Adventure - Pixar Pier", // Palaround - nonswinging
   322: "California Adventure - Pixar Pier", // Incredicoaster
   313: "California Adventure - Pixar Pier" // Toy Story Midway Mania
 
@@ -606,6 +635,9 @@ var closedRideNames = {
   276: "Nemo Submarines",
   284: "Space Mountain - DL",
   286: "Star Tours - DL",
+  274: "Monorail",
+  277: "Carrousel",
+  278: "Teacups - DL",
 
   // DCA
   329: "Guardians - Mission Breakout",
@@ -617,7 +649,14 @@ var closedRideNames = {
   316: "Little Mermaid - DCA",
   319: "Goofy's Sky School",
   322: "Incredicoaster",
-  313: "Midway Mania"
+  313: "Midway Mania",
+  298: "Zephyr",
+  310: "Jessie's Carousel",
+  300: "Jumpin' Jellyfish",
+  13961: "Luigi's Roadsters",
+  315: "Mater's Jamboree",
+  311: "Pal-A-Round: Swinging",
+  5557: "Pal-A-Round: Non-Swinging",
 };
 
   // images used for each ride
@@ -700,6 +739,9 @@ var rideImages = {
   276: "images/276.jpg", // Finding Nemo Submarine Voyage
   284: "images/284.jpg", // Space Mountain / Hyperspace Mountain (DL)
   286: "images/286.jpg", // Star Tours (DL)
+  274: "images/274.jpg", // Monorail
+  277: "images/277.jpg", // Carrousel
+  278: "images/278.jpg", // Teacups
 
   // Disney California Adventure
   329: "images/329.jpg", // Guardians of the Galaxy - Mission: BREAKOUT!
@@ -711,7 +753,14 @@ var rideImages = {
   316: "images/316.jpg", // The Little Mermaid – Ariel's Undersea Adventure
   319: "images/319.jpg", // Goofy's Sky School
   322: "images/322.jpg", // Incredicoaster
-  313: "images/313.jpg"  // Toy Story Midway Mania
+  313: "images/313.jpg",  // Toy Story Midway Mania
+  298: "images/298.jpg",  // Zephyr
+  310: "images/310.jpg",  // Jessie's Carousel
+  300: "images/300.jpg",  // Jellyfish
+  13961: "images/13961.jpg",  // Luigi's
+  315: "images/315.jpg",  // Mater's
+  311: "images/311.jpg",  // Palaround Swinging
+  5557: "images/5557.jpg"  // Palaround Nonswinging
 };
 
   
