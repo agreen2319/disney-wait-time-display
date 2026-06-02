@@ -248,10 +248,10 @@
 
 <script>
 
-// API Proxy
 var proxy = "https://glistening-blini-23387c.netlify.app/.netlify/functions/proxy?url=";
 var nextImage = new Image();
-var hasShuffled = false;
+var hasInitialized = false;
+var dislikedRideIDs = [];
   
 // ride display names
 var rideDisplayNames = {
@@ -810,8 +810,54 @@ function shuffleArray(array) {
 }
 
 // build ordered list
+
 function process(allData) {
-  rideList = [];
+
+  // FIRST LOAD: build the list
+  if (!hasInitialized) {
+    var closedRides = [];
+    var parkTotals = {};
+    var parkClosed = {};
+    allData.forEach(function(data) {
+      if (!data || !data.lands) return;
+      data.lands.forEach(function(land) {
+        land.rides.forEach(function(ride) {
+          var mappedLand = rideToLand[ride.id];
+          var park = rideToPark[ride.id];
+          if (!mappedLand || !park) return;
+          if (dislikedRideIDs.indexOf(ride.id) !== -1) return;
+          // initialize park counters
+          if (!parkTotals[park]) {
+            parkTotals[park] = 0;
+            parkClosed[park] = 0;
+          }
+          parkTotals[park]++;
+          var wait = ride.is_open ? ride.wait_time : 999;
+          if (!ride.is_open) {
+            closedRides.push({
+              id: ride.id,
+              name: ride.name,
+              land: mappedLand
+            });
+            parkClosed[park]++;
+          }
+          rideList.push({
+            id: ride.id,
+            name: rideDisplayNames[ride.id] || ride.name,
+            land: mappedLand,
+            wait: wait
+          });
+        });
+      });
+    });
+
+    shuffleArray(rideList);
+    hasInitialized = true;
+    renderClosed(closedRides, []);
+    return;
+  }
+
+  // SUBSEQUENT LOADS: update waits only
   var closedRides = [];
   var parkTotals = {};
   var parkClosed = {};
@@ -822,20 +868,18 @@ function process(allData) {
         var mappedLand = rideToLand[ride.id];
         var park = rideToPark[ride.id];
         if (!mappedLand || !park) return;
-        // initialize counters
         if (!parkTotals[park]) {
           parkTotals[park] = 0;
           parkClosed[park] = 0;
         }
         parkTotals[park]++;
-        if (ride.is_open) {
-          rideList.push({
-            id: ride.id,
-            name: rideDisplayNames[ride.id] || ride.name,
-            land: mappedLand,
-            wait: ride.wait_time
-          });
-        } else {
+        var wait = ride.is_open ? ride.wait_time : 999;
+        // find ride in existing list
+        var existing = rideList.find(r => r.id === ride.id);
+        if (existing) {
+          existing.wait = wait;
+        }
+        if (!ride.is_open) {
           closedRides.push({
             id: ride.id,
             name: ride.name,
@@ -846,26 +890,7 @@ function process(allData) {
       });
     });
   });
-  
-  // Determine fully closed parks
-  var closedParks = [];
-  Object.keys(parkTotals).forEach(function(park) {
-    if (parkTotals[park] > 0 && parkTotals[park] === parkClosed[park]) {
-      closedParks.push(park);
-    }
-  });
-
-  // remove rides in the closed section that are in closed parks  
-  var filteredClosedRides = closedRides.filter(function(ride) {
-    var park = rideToPark[ride.id];
-    return closedParks.indexOf(park) === -1;
-  });
-  if(!hasShuffled) {
-    shuffleArray(rideList);
-    hasShuffled = true;
-  }
-  renderClosed(filteredClosedRides, closedParks);
-
+  renderClosed(closedRides, []);
 }
 
 function renderClosed(closedRides, closedParks) {
@@ -966,7 +991,21 @@ function getWaitColor(wait) {
 var firstRun = true;
 function showNext() {
   if (rideList.length === 0) return;
-  var ride = rideList[currentIndex];
+  var attempts = 0;
+  var ride;
+  while (attempts < rideList.length) {
+    ride = rideList[currentIndex];
+    // skip closed rides
+    if (ride.wait !== 999) {
+      break;
+    }
+    currentIndex++;
+    if (currentIndex >= rideList.length) {
+      currentIndex = 0;
+    }
+    attempts++;
+  }
+  if (!ride || ride.wait === 999) return;
   var img = rideImages[ride.id] || "images/default.jpg";
   if (firstRun) {
     // set instantly, no animation
