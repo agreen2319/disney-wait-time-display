@@ -191,7 +191,48 @@
       height: 500px;
       object-fit: cover;
     }
-
+    
+    /* Dislike UI container */
+    #dislikeContainer {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+    }
+    
+    /* Button */
+    #dislikeButton {
+      background: #333;
+      color: white;
+      border: 1px solid #555;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    
+    /* Dropdown (drop UP) */
+    #dislikeMenu {
+      position: absolute;
+      bottom: 40px;
+      right: 0;
+      width: 260px;
+      max-height: 500px;
+      overflow-y: auto;
+      background: #111;
+      border: 1px solid #555;
+      display: none;
+    }
+    
+    /* Each row */
+    .dislike-item {
+      display: flex;
+      align-items: center;
+      padding: 6px 8px;
+      border-bottom: 1px solid #333;
+    }
+    
+    .dislike-item label {
+      margin-left: 6px;
+      font-size: 13px;
+    }
 
   </style>
 </head>
@@ -208,21 +249,21 @@
   </div>
 
   <!-- Main content -->
-<div id="content">
+  <div id="content">
 
-  <div class="flip-container" id="nameFlip">
-    <div class="flip-inner">
-      <div class="flip-front name">Loading...</div>
-      <div class="flip-back name"></div>
+    <div class="flip-container" id="nameFlip">
+      <div class="flip-inner">
+        <div class="flip-front name">Loading...</div>
+        <div class="flip-back name"></div>
+      </div>
     </div>
-  </div>
-
-  <div class="flip-container" id="landFlip">
-    <div class="flip-inner">
-      <div class="flip-front land"></div>
-      <div class="flip-back land"></div>
+  
+    <div class="flip-container" id="landFlip">
+      <div class="flip-inner">
+        <div class="flip-front land"></div>
+        <div class="flip-back land"></div>
+      </div>
     </div>
-  </div>
 
   <div id="mainRow">
 
@@ -244,6 +285,15 @@
       <div id="waitLabel">minutes</div>
     </div>
   </div>
+    
+  <!-- Disliked Rides UI -->
+  <div id="dislikeContainer">
+    <button id="dislikeButton">Disliked Rides</button>
+    <div id="dislikeMenu">
+      <div id="dislikeList"></div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -768,6 +818,29 @@ var rideImages = {
 var rideList = [];
 var currentIndex = 0;
 
+// build dislike menu
+function buildDislikeMenu() {
+  var container = document.getElementById("dislikeList");
+  container.innerHTML = "";
+
+  // loop through closedRideNames (correct order)
+  Object.keys(closedRideNames).forEach(function(id) {
+
+    var item = document.createElement("div");
+    item.className = "dislike-item";
+
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = id;
+
+    var label = document.createElement("label");
+    label.innerText = closedRideNames[id];
+
+    item.appendChild(checkbox);
+    item.appendChild(label);
+    container.appendChild(item);
+  });
+}
 
 // fetch all parks
 function fetchTimes() {
@@ -1068,6 +1141,12 @@ function showNext() {
   }
 }
 
+document.getElementById("dislikeButton").onclick = function() {
+  var menu = document.getElementById("dislikeMenu");
+  menu.style.display = (menu.style.display === "block") ? "none" : "block";
+};
+buildDislikeMenu();
+  
 // refresh data every minute
 fetchTimes();
 setInterval(fetchTimes, 60000);
