@@ -634,8 +634,8 @@ var closedRideNames = {
   276: "Nemo Submarines",
   284: "Space Mountain - DL",
   286: "Star Tours - DL",
-  274: "Monorail",
-  277: "Carrousel",
+  274: "DL Monorail",
+  277: "King Arthur Carrousel",
   278: "Teacups - DL",
 
   // DCA
@@ -649,7 +649,7 @@ var closedRideNames = {
   319: "Goofy's Sky School",
   322: "Incredicoaster",
   313: "Midway Mania",
-  298: "Zephyr",
+  298: "Golden Zephyr",
   310: "Jessie's Carousel",
   300: "Jumpin' Jellyfish",
   13961: "Luigi's Roadsters",
@@ -834,6 +834,7 @@ function process(allData) {
           parkTotals[park]++;
           var wait = ride.is_open ? ride.wait_time : 999;
           if (!ride.is_open) {
+            if (dislikedRideIDs.indexOf(ride.id) !== -1) return;
             closedRides.push({
               id: ride.id,
               name: ride.name,
@@ -880,6 +881,7 @@ function process(allData) {
           existing.wait = wait;
         }
         if (!ride.is_open) {
+          if (dislikedRideIDs.indexOf(ride.id) !== -1) return;
           closedRides.push({
             id: ride.id,
             name: ride.name,
