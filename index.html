@@ -252,6 +252,7 @@ var proxy = "https://glistening-blini-23387c.netlify.app/.netlify/functions/prox
 var nextImage = new Image();
 var hasInitialized = false;
 var dislikedRideIDs = [];
+var favoriteRideIDs = []; // up to 5
   
 // ride display names
 var rideDisplayNames = {
@@ -852,7 +853,38 @@ function process(allData) {
       });
     });
 
-    shuffleArray(rideList);
+    // Separate favorites from main list
+    var favorites = [];
+    var nonFavorites = [];
+    rideList.forEach(function(ride) {
+      if (favoriteRideIDs.indexOf(ride.id) !== -1) {
+        favorites.push(ride);
+      } else {
+        nonFavorites.push(ride);
+      }
+    });
+        
+    shuffleArray(nonFavorites); // Shuffle ONLY non-favorites
+    
+    // Rebuild rideList with insertion pattern
+    var newList = [];
+    var chunkSize = 10; // CONTROLS how many random rides go between favorites
+    var index = 0;
+    while (index < nonFavorites.length) {  
+      // add up to 10 random rides
+      for (let i = 0; i < chunkSize && index < nonFavorites.length; i++) {
+        newList.push(nonFavorites[index]);
+        index++;
+      }
+      // insert favorites (if any exist)
+      if (favorites.length > 0) {
+        favorites.forEach(function(fav) {
+          newList.push(fav);
+        });
+      }
+    }
+    rideList = newList;
+
     hasInitialized = true;
     renderClosed(closedRides, []);
     return;
