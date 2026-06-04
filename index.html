@@ -957,9 +957,20 @@ function process(allData) {
       }
     }
     rideList = newList;
-
     hasInitialized = true;
-    renderClosed(closedRides, []);
+
+    var closedParks = [];
+    Object.keys(parkTotals).forEach(function(park) {
+      if (parkTotals[park] > 0 && parkTotals[park] === parkClosed[park]) {
+        closedParks.push(park);
+      }
+    }); 
+    var filteredClosedRides = closedRides.filter(function(ride) {
+      var park = rideToPark[ride.id];
+      return closedParks.indexOf(park) === -1;
+    });
+
+    renderClosed(filteredClosedRides, closedParks);
     return;
   }
 
@@ -997,7 +1008,18 @@ function process(allData) {
       });
     });
   });
-  renderClosed(closedRides, []);
+  var closedParks = [];
+    Object.keys(parkTotals).forEach(function(park) {
+      if (parkTotals[park] > 0 && parkTotals[park] === parkClosed[park]) {
+        closedParks.push(park);
+      }
+    }); 
+    var filteredClosedRides = closedRides.filter(function(ride) {
+      var park = rideToPark[ride.id];
+      return closedParks.indexOf(park) === -1;
+    });
+
+    renderClosed(filteredClosedRides, closedParks);
 }
 
 function renderClosed(closedRides, closedParks) {
