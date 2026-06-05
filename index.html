@@ -665,108 +665,108 @@ var rideToLand = {
 };
 
 // Different display names for closed rides
-var closedRideNames = {
+var closedRideNames = [
 
   // Magic Kingdom
-  134: "Jungle Cruise - MK",
-  137: "Pirates - MK",
-  133: "Small World - MK",
-  132: "Dumbo - MK",
-  127: "Little Mermaid - MK",
-  136: "Peter Pan - MK",
-  129: "Seven Dwarfs Mine Train",
-  126: "Barnstormer",
-  142: "Winnie the Pooh - MK",
-  130: "Big Thunder - MK",
-  13630: "Tiana's - MK",
-  140: "Haunted Mansion - MK",
-  248: "Astro Orbiter - MK",
-  131: "Buzz Lightyear - MK",
-  138: "Space Mountain - MK",
-  143: "Tomorrowland Speedway",
-  1190: "PeopleMover",
-  11527: "TRON",
+  [134, "Jungle Cruise - MK"],
+  [137, "Pirates - MK"],
+  [133, "Small World - MK"],
+  [132, "Dumbo - MK"],
+  [127, "Little Mermaid - MK"],
+  [136, "Peter Pan - MK"],
+  [129, "Seven Dwarfs Mine Train"],
+  [126, "Barnstormer"],
+  [142, "Winnie the Pooh - MK"],
+  [130, "Big Thunder - MK"],
+  [13630, "Tiana's - MK"],
+  [140, "Haunted Mansion - MK"],
+  [248, "Astro Orbiter - MK"],
+  [131, "Buzz Lightyear - MK"],
+  [138, "Space Mountain - MK"],
+  [143, "Tomorrowland Speedway"],
+  [1190, "PeopleMover"],
+  [11527, "TRON"],
 
   // Hollywood Studios
-  6361: "Runaway Railway - HS",
-  5476: "Slinky Dog Dash",
-  117: "Toy Story Mania",
-  16342: "Rock 'n' Roller Coaster",
-  123: "Tower of Terror",
-  120: "Star Tours - HS",
-  6368: "Smugglers Run - HS",
-  6369: "Rise of the Resistance - HS",
+  [6361, "Runaway Railway - HS"],
+  [5476, "Slinky Dog Dash"],
+  [117, "Toy Story Mania"],
+  [16342, "Rock 'n' Roller Coaster"],
+  [123, "Tower of Terror"],
+  [120, "Star Tours - HS"],
+  [6368, "Smugglers Run - HS"],
+  [6369, "Rise of the Resistance - HS"],
 
   // EPCOT
-  10916: "Guardians - Cosmic Rewind",
-  155: "Journey into Imagination",
-  156: "Living with the Land",
-  158: "Mission Space",
-  10914: "Remy's Adventure",
-  153: "The Seas with Nemo",
-  151: "Soarin' - EPCOT",
-  159: "Spaceship Earth",
-  160: "Test Track",
+  [10916, "Guardians - Cosmic Rewind"],
+  [155, "Journey into Imagination"],
+  [156, "Living with the Land"],
+  [158, "Mission Space"],
+  [10914, "Remy's Adventure"],
+  [153, "The Seas with Nemo"],
+  [151, "Soarin' - EPCOT"],
+  [159, "Spaceship Earth"],
+  [160, "Test Track"],
 
   // Animal Kingdom
-  4439: "Flight of Passage",
-  110: "Expedition Everest",
-  112: "Kali River Rapids",
-  113: "Kilimanjaro Safari",
-  4438: "Na'vi River Journey",
+  [4439, "Flight of Passage"],
+  [110, "Expedition Everest"],
+  [112, "Kali River Rapids"],
+  [113, "Kilimanjaro Safari"],
+  [4438, "Na'vi River Journey"],
 
   // Disneyland
-  323: "Big Thunder - DL",
-  296: "Jungle Cruise - DL",
-  326: "Indiana Jones",
-  306: "Winnie the Pooh - DL",
-  14168: "Tiana's - DL",
-  13958: "Haunted Mansion - DL",
-  289: "Pirates - DL",
-  307: "Small World - DL",
-  285: "Alice in Wonderland",
-  303: "Casey Jr",
-  275: "Dumbo - DL",
-  279: "Matterhorn",
-  280: "Mr. Toad's Wild Ride",
-  281: "Peter Pan - DL",
-  282: "Pinocchio",
-  283: "Snow White",
-  305: "Storybook Land Boats",
-  324: "Gadget Coaster",
-  11526: "Runaway Railway - DL",
-  332: "Roger Rabbit",
-  6339: "Smugglers Run - DL",
-  6340: "Rise of the Resistance - DL",
-  287: "Astro Orbitor - DL",
-  317: "Autopia",
-  273: "Buzz Lightyear - DL",
-  276: "Nemo Submarines",
-  284: "Space Mountain - DL",
-  286: "Star Tours - DL",
-  274: "DL Monorail",
-  277: "King Arthur Carrousel",
-  278: "Teacups - DL",
+  [323, "Big Thunder - DL"],
+  [296, "Jungle Cruise - DL"],
+  [326, "Indiana Jones"],
+  [306, "Winnie the Pooh - DL"],
+  [14168, "Tiana's - DL"],
+  [13958, "Haunted Mansion - DL"],
+  [289, "Pirates - DL"],
+  [307, "Small World - DL"],
+  [285, "Alice in Wonderland"],
+  [303, "Casey Jr"],
+  [275, "Dumbo - DL"],
+  [279, "Matterhorn"],
+  [280, "Mr. Toad's Wild Ride"],
+  [281, "Peter Pan - DL"],
+  [282, "Pinocchio"],
+  [283, "Snow White"],
+  [305, "Storybook Land Boats"],
+  [277, "King Arthur Carrousel"],
+  [278, "Teacups - DL"],
+  [324, "Gadget Coaster"],
+  [11526, "Runaway Railway - DL"],
+  [332, "Roger Rabbit"],
+  [6339, "Smugglers Run - DL"],
+  [6340, "Rise of the Resistance - DL"],
+  [287, "Astro Orbitor - DL"],
+  [317, "Autopia"],
+  [273, "Buzz Lightyear - DL"],
+  [276, "Nemo Submarines"],
+  [284, "Space Mountain - DL"],
+  [286, "Star Tours - DL"],
+  [274, "DL Monorail"],
 
   // DCA
-  329: "Guardians - Mission Breakout",
-  8843: "Web Slingers",
-  295: "Radiator Springs Racers",
-  312: "Soarin' - DCA",
-  302: "Grizzly River Run",
-  291: "Monsters Inc.",
-  316: "Little Mermaid - DCA",
-  319: "Goofy's Sky School",
-  322: "Incredicoaster",
-  313: "Midway Mania",
-  298: "Golden Zephyr",
-  310: "Jessie's Carousel",
-  300: "Jumpin' Jellyfish",
-  13961: "Luigi's Roadsters",
-  315: "Mater's Jamboree",
-  311: "Pal-A-Round: Swinging",
-  5557: "Pal-A-Round: Non-Swinging",
-};
+  [329, "Guardians - Mission Breakout"],
+  [8843, "Web Slingers"],
+  [295, "Radiator Springs Racers"],
+  [312, "Soarin' - DCA"],
+  [302, "Grizzly River Run"],
+  [291, "Monsters Inc."],
+  [316, "Little Mermaid - DCA"],
+  [319, "Goofy's Sky School"],
+  [322, "Incredicoaster"],
+  [313, "Midway Mania"],
+  [298, "Golden Zephyr"],
+  [310, "Jessie's Carousel"],
+  [300, "Jumpin' Jellyfish"],
+  [13961, "Luigi's Roadsters"],
+  [315, "Mater's Jamboree"],
+  [311, "Pal-A-Round: Swinging"],
+  [5557, "Pal-A-Round: Non-Swinging"],
+];
 
   // images used for each ride
 var rideImages = {
@@ -881,7 +881,7 @@ function buildFavoriteMenu() {
   var container = document.getElementById("favoriteList");
   container.innerHTML = "";
   var previousLand = null;
-  Object.entries(closedRideNames).forEach(function([id, name]) {
+  closedRideNames.forEach(function([id, name]) {
     var land = rideToPark[id] || "Other";
     // Add header if land changes
     if (land !== previousLand) {
@@ -933,7 +933,7 @@ function buildDislikeMenu() {
   var container = document.getElementById("dislikeList");
   container.innerHTML = "";
   var previousLand = null;
-  Object.entries(closedRideNames).forEach(function([id, name]) {
+  closedRideNames.forEach(function([id, name]) {
     var land = rideToPark[id] || "Other";
     // Add header if land changes
     if (land !== previousLand) {
@@ -1138,7 +1138,10 @@ function renderClosed(closedRides, closedParks) {
   closedRides.forEach(function(ride) {
     var div = document.createElement("div");
     div.className = "closed-ride";
-    var name = closedRideNames[ride.id] || ride.name;
+    var match = closedRideNames.find(function(entry) {
+      return entry[0] === ride.id;
+    });
+    var name = match ? match[1] : ride.name;
     div.innerText = name;
     listContainer.appendChild(div);
   });
