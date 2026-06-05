@@ -958,6 +958,13 @@ function buildDislikeMenu() {
     item.appendChild(label);
     container.appendChild(item);
   });
+  container.addEventListener("change", function() {
+    var checked = container.querySelectorAll("input:checked");
+    dislikedRideIDs = Array.from(checked).map(function(cb) {
+      return parseInt(cb.value);
+    });
+    rebuildRideOrder();
+  });
 }
 
 // fetch all parks
@@ -1246,11 +1253,11 @@ function showNext() {
         break;
       }
       attempts++;
-      // if all favorites are closed, go back to random rides
-      if (showingFavorites && !ride) {
-          showingFavorites = false;
-        }
     }
+    // if all favorites are closed, go back to random rides
+    if (showingFavorites && !ride) {
+        showingFavorites = false;
+      }
   }
   else {
     var attempts = 0;
@@ -1261,7 +1268,9 @@ function showNext() {
         nonFavoriteIndex = 0;
       }
       // skip closed & favorites
-      if (candidate.wait !== 999 && favoriteRideIDs.indexOf(candidate.id) === -1) {
+      if (candidate.wait !== 999 && 
+          favoriteRideIDs.indexOf(candidate.id) === -1 &&
+          dislikedRideIDs.indexOf(candidate.id) === -1) {
         ride = candidate;
         break;
       }
