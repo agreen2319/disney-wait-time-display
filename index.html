@@ -1143,6 +1143,7 @@ function renderClosed(closedRides, closedParks) {
   parksContainer.innerHTML = "";
   // Closed rides
   closedRides.forEach(function(ride) {
+    if (dislikedRideIDs.indexOf(ride.id) !== -1) return; // don't render disliked rides
     var div = document.createElement("div");
     div.className = "closed-ride";
     var match = closedRideNames.find(function(entry) {
