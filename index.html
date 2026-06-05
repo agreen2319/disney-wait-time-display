@@ -240,7 +240,7 @@
     #favoriteMenu {
       position: absolute;
       bottom: 40px;
-      left: 0;
+      right: 0;
       width: 260px;
       max-height: 500px;
       overflow-y: auto;
@@ -1240,13 +1240,18 @@ function showNext() {
   }
 }
 
+  // Display menu dropdowns
 document.getElementById("dislikeButton").onclick = function() {
-  var menu = document.getElementById("dislikeMenu");
-  menu.style.display = (menu.style.display === "block") ? "none" : "block";
+  var d = document.getElementById("dislikeMenu");
+  var f = document.getElementById("favoriteMenu");
+  d.style.display = (d.style.display === "block") ? "none" : "block";
+  f.style.display = "none";
 };
 document.getElementById("favoriteButton").onclick = function() {
-  var menu = document.getElementById("favoriteMenu");
-  menu.style.display = (menu.style.display === "block") ? "none" : "block";
+  var d = document.getElementById("dislikeMenu");
+  var f = document.getElementById("favoriteMenu");
+  f.style.display = (f.style.display === "block") ? "none" : "block";
+  d.style.display = "none";
 };
 buildDislikeMenu();
 buildFavoriteMenu();
