@@ -1230,14 +1230,26 @@ var firstRun = true;
 function showNext() {
   if (rideList.length === 0) return;
   var ride = null;
-  // If currently showing favorites
+  // If currently showing favorites, ride = favorite. else, ride = next ride
   if (showingFavorites && favoriteList.length > 0) {
-    ride = favoriteList[favoriteIndex];
-    favoriteIndex++;
-    // ✅ once we've shown all favorites, exit this mode
-    if (favoriteIndex >= favoriteList.length) {
-      showingFavorites = false;
-      favoriteIndex = 0;
+    var attempts = 0;
+    while (attempts < favoriteList.length) {
+      var candidate = favoriteList[favoriteIndex];
+      favoriteIndex++;
+      if (favoriteIndex >= favoriteList.length) {
+        favoriteIndex = 0;
+        showingFavorites = false; // exit after full pass
+      }
+      // skip closed rides
+      if (candidate.wait !== 999) {
+        ride = candidate;
+        break;
+      }
+      attempts++;
+      // if all favorites are closed, go back to random rides
+      if (showingFavorites && !ride) {
+          showingFavorites = false;
+        }
     }
   }
   else {
@@ -1248,8 +1260,8 @@ function showNext() {
       if (nonFavoriteIndex >= nonFavoriteList.length) {
         nonFavoriteIndex = 0;
       }
-      // skip closed
-      if (candidate.wait !== 999) {
+      // skip closed & favorites
+      if (candidate.wait !== 999 && favoriteRideIDs.indexOf(candidate.id) === -1) {
         ride = candidate;
         break;
       }
