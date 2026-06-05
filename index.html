@@ -880,57 +880,80 @@ var currentIndex = 0;
 function buildFavoriteMenu() {
   var container = document.getElementById("favoriteList");
   container.innerHTML = "";
-  Object.keys(closedRideNames).forEach(function(id) {
+  var previousLand = null;
+  Object.entries(closedRideNames).forEach(function([id, name]) {
+    var land = rideToPark[id] || "Other";
+    // Add header if land changes
+    if (land !== previousLand) {
+      var header = document.createElement("div");
+      header.innerText = land;
+      header.style.padding = "6px 8px";
+      header.style.fontWeight = "bold";
+      header.style.background = "#222";
+      header.style.borderBottom = "1px solid #444";
+      container.appendChild(header);
+      previousLand = land;
+    }
+    // Add ride row
     var item = document.createElement("div");
     item.className = "dislike-item";
     var checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.value = id;
     var label = document.createElement("label");
-    label.innerText = closedRideNames[id];
+    label.innerText = name;
     item.appendChild(checkbox);
     item.appendChild(label);
     container.appendChild(item);
   });
+
   // ✅ limit to 5 selections
-container.addEventListener("change", function() {
-  var checked = container.querySelectorAll("input:checked");
-  // enforce max 5
-  if (checked.length >= 5) {
-    container.querySelectorAll("input:not(:checked)").forEach(function(box) {
-      box.disabled = true;
+  container.addEventListener("change", function() {
+    var checked = container.querySelectorAll("input:checked");
+    // enforce max 5
+    if (checked.length >= 5) {
+      container.querySelectorAll("input:not(:checked)").forEach(function(box) {
+        box.disabled = true;
+      });
+    } else {
+      container.querySelectorAll("input").forEach(function(box) {
+        box.disabled = false;
+      });
+    }
+    // update favoriteRideIDs
+    favoriteRideIDs = Array.from(checked).map(function(cb) {
+      return parseInt(cb.value);
     });
-  } else {
-    container.querySelectorAll("input").forEach(function(box) {
-      box.disabled = false;
-    });
-  }
-  // update favoriteRideIDs
-  favoriteRideIDs = Array.from(checked).map(function(cb) {
-    return parseInt(cb.value);
+    rebuildRideOrder();
   });
-  rebuildRideOrder();
-});
 }
 
 // build dislike menu
 function buildDislikeMenu() {
   var container = document.getElementById("dislikeList");
   container.innerHTML = "";
-
-  // loop through closedRideNames (correct order)
-  Object.keys(closedRideNames).forEach(function(id) {
-
+  var previousLand = null;
+  Object.entries(closedRideNames).forEach(function([id, name]) {
+    var land = rideToPark[id] || "Other";
+    // Add header if land changes
+    if (land !== previousLand) {
+      var header = document.createElement("div");
+      header.innerText = land;
+      header.style.padding = "6px 8px";
+      header.style.fontWeight = "bold";
+      header.style.background = "#222";
+      header.style.borderBottom = "1px solid #444";
+      container.appendChild(header);
+      previousLand = land;
+    }
+    // Add ride row
     var item = document.createElement("div");
     item.className = "dislike-item";
-
     var checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.value = id;
-
     var label = document.createElement("label");
-    label.innerText = closedRideNames[id];
-
+    label.innerText = name;
     item.appendChild(checkbox);
     item.appendChild(label);
     container.appendChild(item);
