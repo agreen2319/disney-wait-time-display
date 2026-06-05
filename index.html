@@ -355,6 +355,13 @@ var nextImage = new Image();
 var hasInitialized = false;
 var dislikedRideIDs = [];
 var favoriteRideIDs = []; // up to 5
+var nonFavoriteList = [];
+var favoriteList = [];
+var nonFavoriteIndex = 0;
+var showingFavorites = false;
+var blockCounter = 0; // counts up to 10
+var favoriteIndex = 0;
+
   
 // ride display names
 var rideDisplayNames = {
@@ -1080,39 +1087,22 @@ function process(allData) {
 }
 
 function rebuildRideOrder() {
-  // separate favorites from current list
-  var favorites = [];
-  var nonFavorites = [];
+  favoriteList = [];
+  nonFavoriteList = [];
   rideList.forEach(function(ride) {
     if (favoriteRideIDs.indexOf(ride.id) !== -1) {
-      favorites.push(ride);
+      favoriteList.push(ride);
     } else {
-      nonFavorites.push(ride);
+      nonFavoriteList.push(ride);
     }
   });
-  // shuffle non-favorites
-  shuffleArray(nonFavorites);
-  // rebuild with pattern
-  var newList = [];
-  var chunkSize = 10;
-  var index = 0;
-  while (index < nonFavorites.length) {
-    // add random rides
-    for (let i = 0; i < chunkSize && index < nonFavorites.length; i++) {
-      newList.push(nonFavorites[index]);
-      index++;
-    }
-    // insert favorites
-    if (favorites.length > 0) {
-      favorites.forEach(function(fav) {
-        newList.push(fav);
-      });
-    }
-  }
-
-  rideList = newList;
-  // reset index so rotation doesn’t break
-  currentIndex = 0;
+  // shuffle ONLY once when first built
+  shuffleArray(nonFavoriteList);
+  // reset iteration
+  nonFavoriteIndex = 0;
+  blockCounter = 0;
+  showingFavorites = false;
+  favoriteIndex = 0;
 }
 
 function renderClosed(closedRides, closedParks) {
@@ -1213,24 +1203,43 @@ function getWaitColor(wait) {
 var firstRun = true;
 function showNext() {
   if (rideList.length === 0) return;
-  var attempts = 0;
-  var ride;
-  while (attempts < rideList.length) {
-    ride = rideList[currentIndex];
-    // skip closed rides
-    if (ride.wait !== 999) {
-      break;
+  var ride = null;
+  // If currently showing favorites
+  if (showingFavorites && favoriteList.length > 0) {
+    ride = favoriteList[favoriteIndex];
+    favoriteIndex++;
+    // ✅ once we've shown all favorites, exit this mode
+    if (favoriteIndex >= favoriteList.length) {
+      showingFavorites = false;
+      favoriteIndex = 0;
     }
-    currentIndex++;
-    if (currentIndex >= rideList.length) {
-      currentIndex = 0;
-    }
-    attempts++;
   }
-  if (!ride || ride.wait === 999) return;
+  else {
+    var attempts = 0;
+    while (attempts < nonFavoriteList.length) {
+      var candidate = nonFavoriteList[nonFavoriteIndex];
+      nonFavoriteIndex++;
+      if (nonFavoriteIndex >= nonFavoriteList.length) {
+        nonFavoriteIndex = 0;
+      }
+      // skip closed
+      if (candidate.wait !== 999) {
+        ride = candidate;
+        break;
+      }
+      attempts++;
+    }
+    if (!ride) return;
+    blockCounter++;
+    // after 10 rides, switch to favorites
+    if (blockCounter >= 10 && favoriteList.length > 0) {
+      showingFavorites = true;
+      blockCounter = 0;
+    }
+  }
+  if (!ride) return;
   var img = rideImages[ride.id] || "images/default.jpg";
   if (firstRun) {
-    // set instantly, no animation
     document.querySelector("#nameFlip .flip-front").innerText = ride.name;
     document.querySelector("#landFlip .flip-front").innerText = ride.land;
     document.querySelector("#imageFlip .flip-front").src = img;
@@ -1249,10 +1258,6 @@ function showNext() {
     setTimeout(function() {
       flipElement("waitFlip", ride.wait);
     }, 300);
-  }
-  currentIndex++;
-  if (currentIndex >= rideList.length) {
-    currentIndex = 0;
   }
 }
 
