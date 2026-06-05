@@ -864,13 +864,12 @@ var rideImages = {
   311: "images/311.jpg",  // Palaround Swinging
   5557: "images/5557.jpg"  // Palaround Nonswinging
 };
-
   
 // store rides
 var rideList = [];
 var currentIndex = 0;
 
-  // Build favorite Menu
+// Build favorite Menu
 function buildFavoriteMenu() {
   var container = document.getElementById("favoriteList");
   container.innerHTML = "";
@@ -887,18 +886,24 @@ function buildFavoriteMenu() {
     container.appendChild(item);
   });
   // ✅ limit to 5 selections
-  container.addEventListener("change", function() {
-    var checked = container.querySelectorAll("input:checked");
-    if (checked.length >= 5) {
-      container.querySelectorAll("input:not(:checked)").forEach(function(box) {
-        box.disabled = true;
-      });
-    } else {
-      container.querySelectorAll("input").forEach(function(box) {
-        box.disabled = false;
-      });
-    }
+container.addEventListener("change", function() {
+  var checked = container.querySelectorAll("input:checked");
+  // enforce max 5
+  if (checked.length >= 5) {
+    container.querySelectorAll("input:not(:checked)").forEach(function(box) {
+      box.disabled = true;
+    });
+  } else {
+    container.querySelectorAll("input").forEach(function(box) {
+      box.disabled = false;
+    });
+  }
+  // update favoriteRideIDs
+  favoriteRideIDs = Array.from(checked).map(function(cb) {
+    return parseInt(cb.value);
   });
+  rebuildRideOrder();
+});
 }
 
 // build dislike menu
@@ -1008,38 +1013,7 @@ function process(allData) {
         });
       });
     });
-
-    // Separate favorites from main list
-    var favorites = [];
-    var nonFavorites = [];
-    rideList.forEach(function(ride) {
-      if (favoriteRideIDs.indexOf(ride.id) !== -1) {
-        favorites.push(ride);
-      } else {
-        nonFavorites.push(ride);
-      }
-    });
-        
-    shuffleArray(nonFavorites); // Shuffle ONLY non-favorites
-    
-    // Rebuild rideList with insertion pattern
-    var newList = [];
-    var chunkSize = 10; // CONTROLS how many random rides go between favorites
-    var index = 0;
-    while (index < nonFavorites.length) {  
-      // add up to 10 random rides
-      for (let i = 0; i < chunkSize && index < nonFavorites.length; i++) {
-        newList.push(nonFavorites[index]);
-        index++;
-      }
-      // insert favorites (if any exist)
-      if (favorites.length > 0) {
-        favorites.forEach(function(fav) {
-          newList.push(fav);
-        });
-      }
-    }
-    rideList = newList;
+    rebuildRideOrder();
     hasInitialized = true;
 
     var closedParks = [];
@@ -1103,6 +1077,42 @@ function process(allData) {
     });
 
     renderClosed(filteredClosedRides, closedParks);
+}
+
+function rebuildRideOrder() {
+  // separate favorites from current list
+  var favorites = [];
+  var nonFavorites = [];
+  rideList.forEach(function(ride) {
+    if (favoriteRideIDs.indexOf(ride.id) !== -1) {
+      favorites.push(ride);
+    } else {
+      nonFavorites.push(ride);
+    }
+  });
+  // shuffle non-favorites
+  shuffleArray(nonFavorites);
+  // rebuild with pattern
+  var newList = [];
+  var chunkSize = 10;
+  var index = 0;
+  while (index < nonFavorites.length) {
+    // add random rides
+    for (let i = 0; i < chunkSize && index < nonFavorites.length; i++) {
+      newList.push(nonFavorites[index]);
+      index++;
+    }
+    // insert favorites
+    if (favorites.length > 0) {
+      favorites.forEach(function(fav) {
+        newList.push(fav);
+      });
+    }
+  }
+
+  rideList = newList;
+  // reset index so rotation doesn’t break
+  currentIndex = 0;
 }
 
 function renderClosed(closedRides, closedParks) {
