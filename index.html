@@ -195,8 +195,16 @@
     /* Dislike UI container */
     #dislikeContainer {
       position: absolute;
-      left: 695px;
-      bottom: 7px;
+    }
+
+    /* Control UI container */
+    #controlContainer {
+      position: absolute;
+      left: 40px;
+      bottom: 140px; /* same alignment you liked */
+    
+      display: flex;
+      gap: 10px; /* space between buttons */
     }
     
     /* Button */
@@ -221,6 +229,26 @@
       display: none;
     }
     
+    #favoriteButton {
+      background: #333;
+      color: white;
+      border: 1px solid #555;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    
+    #favoriteMenu {
+      position: absolute;
+      bottom: 40px;
+      left: 0;
+      width: 260px;
+      max-height: 500px;
+      overflow-y: auto;
+      background: #111;
+      border: 1px solid #555;
+      display: none;
+    }
+    
     /* Each row */
     .dislike-item {
       display: flex;
@@ -232,6 +260,11 @@
     .dislike-item label {
       margin-left: 6px;
       font-size: 13px;
+    }
+    
+    #dislikeContainer,
+    #favoriteContainer {
+      position: relative;
     }
 
   </style>
@@ -286,12 +319,25 @@
     </div>
   </div>
     
-  <!-- Disliked Rides UI -->
-  <div id="dislikeContainer">
-    <button id="dislikeButton">Disliked Rides</button>
-    <div id="dislikeMenu">
-      <div id="dislikeList"></div>
+  <!-- Liked/Disliked Rides UI -->
+  <div id="controlContainer">
+  
+    <!-- Disliked -->
+    <div id="dislikeContainer">
+      <button id="dislikeButton">Disliked Rides</button>
+      <div id="dislikeMenu">
+        <div id="dislikeList"></div>
+      </div>
     </div>
+  
+    <!-- Liked -->
+    <div id="favoriteContainer">
+      <button id="favoriteButton">Favorite Rides</button>
+      <div id="favoriteMenu">
+        <div id="favoriteList"></div>
+      </div>
+    </div>
+  
   </div>
 
 </div>
@@ -818,6 +864,37 @@ var rideImages = {
 var rideList = [];
 var currentIndex = 0;
 
+  // Build favorite Menu
+function buildFavoriteMenu() {
+  var container = document.getElementById("favoriteList");
+  container.innerHTML = "";
+  Object.keys(closedRideNames).forEach(function(id) {
+    var item = document.createElement("div");
+    item.className = "dislike-item";
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = id;
+    var label = document.createElement("label");
+    label.innerText = closedRideNames[id];
+    item.appendChild(checkbox);
+    item.appendChild(label);
+    container.appendChild(item);
+  });
+  // ✅ limit to 5 selections
+  container.addEventListener("change", function() {
+    var checked = container.querySelectorAll("input:checked");
+    if (checked.length >= 5) {
+      container.querySelectorAll("input:not(:checked)").forEach(function(box) {
+        box.disabled = true;
+      });
+    } else {
+      container.querySelectorAll("input").forEach(function(box) {
+        box.disabled = false;
+      });
+    }
+  });
+}
+
 // build dislike menu
 function buildDislikeMenu() {
   var container = document.getElementById("dislikeList");
@@ -1167,7 +1244,12 @@ document.getElementById("dislikeButton").onclick = function() {
   var menu = document.getElementById("dislikeMenu");
   menu.style.display = (menu.style.display === "block") ? "none" : "block";
 };
+document.getElementById("favoriteButton").onclick = function() {
+  var menu = document.getElementById("favoriteMenu");
+  menu.style.display = (menu.style.display === "block") ? "none" : "block";
+};
 buildDislikeMenu();
+buildFavoriteMenu();
   
 // refresh data every minute
 fetchTimes();
